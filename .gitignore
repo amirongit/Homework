@@ -265,3 +265,4 @@ tags
 *.bak
 *.vscode
 settings.json
+pytest.ini
