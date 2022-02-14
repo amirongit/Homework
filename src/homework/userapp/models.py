@@ -12,7 +12,8 @@ class User(models.Model):
                                 blank=False, null=False)
     name = models.CharField('real name', max_length=128, blank=False,
                             null=False)
-    registration_date = models.DateField('registration date', null=False)
+    registration_date = models.DateField('registration date', null=False,
+                                         auto_now_add=True)
 
     def __str__(self):
         return self.name
