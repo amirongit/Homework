@@ -18,7 +18,6 @@ class PersentationStudentRel(models.Model):
     presentation = models.ForeignKey('courseapp.Presentation',
                                      on_delete=models.CASCADE)
     grade = models.IntegerField('course grade', blank=True)
-    passed = models.BooleanField(default=False)
 
 
 class Presentation(models.Model):
