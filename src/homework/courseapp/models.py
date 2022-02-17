@@ -8,7 +8,7 @@ class Course(models.Model):
     teacher = models.ForeignKey('userapp.Teacher', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.name} by {self.creator.name}'
+        return f'{self.name} by {self.teacher.name}'
 
 
 class PersentationStudentRel(models.Model):
