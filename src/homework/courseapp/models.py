@@ -14,8 +14,6 @@ class Course(models.Model):
 
 class PersentationStudentRel(models.Model):
     student = models.ForeignKey('userapp.Student', on_delete=models.CASCADE)
-    # TODO: if the student object is deleted, will it cause the presentation
-    # object to delete?!
     presentation = models.ForeignKey('courseapp.Presentation',
                                      on_delete=models.CASCADE)
     grade = models.IntegerField('course grade', blank=True, null=True)
