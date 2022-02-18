@@ -1,0 +1,8 @@
+{% extends './base.html' %}
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ reg_form }}
+        <input type="submit" value="Join">
+    </form>
+{% endblock content %}
