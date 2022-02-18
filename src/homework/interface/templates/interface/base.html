@@ -12,7 +12,7 @@
         <nav>
             <ul>
                 <li>
-                    <a href="#">Register</a>
+                    <a href="{% url 'interface:register' %}">Register</a>
                 </li>
                 <li>
                     <a href="#">Login</a>
@@ -26,6 +26,7 @@
             </ul>
         </nav>
     </header>
+    <br>
     {% block content %}
     {% endblock content %}
 </body>
