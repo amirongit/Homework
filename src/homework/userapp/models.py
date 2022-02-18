@@ -8,10 +8,12 @@ class User(models.Model):
     class Meta:
         abstract = True
 
-    username = models.CharField('username', max_length=32, unique=True,
-                                blank=False, null=False)
-    name = models.CharField('real name', max_length=128, blank=False,
-                            null=False)
+    username = models.CharField(max_length=32, unique=True, blank=False,
+                                null=False)
+    name = models.CharField(max_length=128, blank=False, null=False)
+    email = models.EmailField(unique=True, blank=False, null=False,
+                              editable=False)
+    password = models.CharField(max_length=64, blank=False, null=False)
     registration_date = models.DateField('registration date', null=False,
                                          auto_now_add=True)
 
