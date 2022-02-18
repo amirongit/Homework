@@ -16,6 +16,8 @@ header {
     height: 30px;
     display: flex;
     align-items: center;
+    max-width: 80%;
+    margin: auto;
 }
 
 header * {
