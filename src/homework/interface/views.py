@@ -7,4 +7,4 @@ class Index(generic.TemplateView):
     template_name = 'interface/index.html'
 
     def get_context_data(self):
-        return {'title': 'Homework'}
+        return {'title': 'Homepage'}
