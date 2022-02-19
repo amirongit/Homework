@@ -12,7 +12,7 @@ header {
     position: fixed;
     left: 0;
     right: 0;
-    top: 5px;
+    top: 15px;
     height: 30px;
     display: flex;
     align-items: center;
@@ -31,4 +31,8 @@ header ul li {
 header li a {
     color: #d4d4d4;
     text-decoration: none;
+}
+
+form input {
+    display: block;
 }
