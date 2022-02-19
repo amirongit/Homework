@@ -10,7 +10,8 @@ from userapp.models import Teacher
 
 class CourseModelTest(TestCase):
     def setUp(self):
-        Teacher.objects.create(username='dummyteacher', name='Dummy Teacher')
+        Teacher.objects.create(username='dummyteacher', first_name='Dummy',
+                               last_name='Teacher')
         Course.objects.create(name='Dummy Course',
                               teacher=Teacher.objects.get(
                                   username='dummyteacher'))
@@ -22,14 +23,16 @@ class CourseModelTest(TestCase):
 
 class PresentationModelTest(TestCase):
     def setUp(self):
-        Teacher.objects.create(username='dummyteacher', name='Dummy Teacher')
-        teacher_obj = Teacher.objects.get(username='dummyteacher')
-        Course.objects.create(name='Dummy Course', teacher=teacher_obj)
-        course_obj = Course.objects.get(name='Dummy Course')
+        Teacher.objects.create(username='dummyteacher', first_name='Dummy',
+                               last_name='Teacher')
+        Course.objects.create(name='Dummy Course',
+                              teacher=Teacher.objects.get(
+                                  username='dummyteacher'))
         Presentation.objects.create(start_date=now().date() -
                                     timedelta(days=3),
                                     end_date=now().date() + timedelta(days=3),
-                                    course=course_obj)
+                                    course=Course.objects.get(
+                                        name='Dummy Course'))
 
     def test_string_format(self):
         presentation_obj = Presentation.objects.get(pk=1)
