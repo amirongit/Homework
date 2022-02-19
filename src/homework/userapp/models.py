@@ -1,10 +1,10 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 
 # Create your models here.
 
 
 class User(AbstractUser):
-    pass
+    objects = UserManager()
 
 
 class Teacher(User):
