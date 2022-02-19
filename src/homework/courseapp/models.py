@@ -20,8 +20,8 @@ class PresentationStudentRel(models.Model):
 
 
 class Presentation(models.Model):
-    start_date = models.DateField('start date')
-    end_date = models.DateField('end date')
+    start_date = models.DateField('start date', null=False, blank=False)
+    end_date = models.DateField('end date', null=False, blank=False)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=False,
                                blank=False)
     students = models.ManyToManyField('userapp.Student',
