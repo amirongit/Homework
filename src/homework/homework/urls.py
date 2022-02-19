@@ -16,5 +16,6 @@ Including another URLconf
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('interface.urls'))
+    path('', include('interface.urls')),
+    path('user/', include('userapp.urls'))
 ]
