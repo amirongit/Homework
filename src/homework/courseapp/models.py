@@ -12,7 +12,7 @@ class Course(models.Model):
         return f'{self.name} by {self.teacher.name}'
 
 
-class PrsentationStudentRel(models.Model):
+class PresentationStudentRel(models.Model):
     student = models.ForeignKey('userapp.Student', on_delete=models.CASCADE)
     presentation = models.ForeignKey('courseapp.Presentation',
                                      on_delete=models.CASCADE)
@@ -25,7 +25,7 @@ class Presentation(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=False,
                                blank=False)
     students = models.ManyToManyField('userapp.Student',
-                                      through=PrsentationStudentRel)
+                                      through=PresentationStudentRel)
 
     def __str__(self):
         return f'{str(self.course)} from {self.start_date} to {self.end_date}'
