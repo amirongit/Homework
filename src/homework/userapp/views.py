@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages import success, error
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
@@ -34,3 +34,7 @@ class LoginView_(LoginView):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': 'Login'})
         return cxt
+
+
+class LogoutView_(LogoutView):
+    pass
