@@ -29,5 +29,8 @@ def register(request):
 
 class LoginView_(LoginView):
     template_name = 'userapp/login.html'
-    # TODO: find out if the user is a teacher or a student and save it in a
-    # session, remove login / view buttons from navbar for the logged in user
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': 'Login'})
+        return cxt
