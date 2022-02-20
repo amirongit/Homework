@@ -5,7 +5,6 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from .forms import RegisterForm
-from .models import Student, Teacher
 
 # Create your views here.
 
