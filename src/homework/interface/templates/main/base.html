@@ -18,7 +18,7 @@
                     <a href="{% url 'userapp:register' %}">Register</a>
                 </li>
                 <li>
-                    <a href="#">Login</a>
+                    <a href="{% url 'userapp:login' %}">Login</a>
                 </li>
                 <li>
                     <a href="#">About</a>
@@ -27,7 +27,16 @@
         </nav>
     </header>
     <br>
-    <br>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <br>
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <br>
+    {% endif %}
     {% block content %}
     {% endblock content %}
 </body>
