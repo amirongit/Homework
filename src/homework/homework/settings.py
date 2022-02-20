@@ -56,6 +56,7 @@ ROOT_URLCONF = 'homework.urls'
 
 AUTH_USER_MODEL = 'userapp.User'
 LOGIN_REDIRECT_URL = 'interface:index'
+LOGOUT_REDIRECT_URL = 'interface:index'
 
 TEMPLATES = [
     {
