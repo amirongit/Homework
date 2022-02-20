@@ -1,9 +1,11 @@
+from django.contrib.auth.views import LoginView
+from django.contrib.messages import success, error
 from django.db import IntegrityError
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from .forms import RegisterForm
-from .models import Teacher, Student
+from .models import Student, Teacher
 
 # Create your views here.
 
@@ -12,23 +14,23 @@ def register(request):
     if request.method == 'POST':
         reg_form = RegisterForm(request.POST)
         if reg_form.is_valid() is not True:
-            return render(request, 'main/error.html',
-                          {'title': 'Form Validation',
-                           'error': 'The form wasn\'t filled out properly.'})
-        model = Teacher if reg_form.cleaned_data[
+            error(request, 'The form wasn\'t filled out properly.')
+            return redirect(reverse('userapp:register'))
+        user_type = Teacher if reg_form.cleaned_data[
             'user_type'] == 't' else Student
         try:
-            model.objects.create_user(
-                username=reg_form.cleaned_data['username'],
-                first_name=reg_form.cleaned_data['first_name'],
-                last_name=reg_form.cleaned_data['last_name'],
-                email=reg_form.cleaned_data['email'],
-                password=reg_form.cleaned_data['password'])
+            user_type(user_ptr=reg_form.save()).save_base(raw=True)
         except (IntegrityError, ValueError):
-            return render(request, 'main/error.html',
-                          {'title': 'Value Error',
-                           'error': 'The given values can\'t be used.'})
-        return redirect(reverse('interface:index'))
+            error(request, 'The given values can\'t be used.')
+            return redirect(reverse('userapp:register'))
+        success(request, 'The user was created succesfully.')
+        return redirect(reverse('userapp:login'))
     reg_form = RegisterForm()
     return render(request, 'userapp/register.html', {'title': 'Register',
-                                                     'reg_form': reg_form})
+                                                     'form': reg_form})
+
+
+class LoginView_(LoginView):
+    template_name = 'userapp/login.html'
+    # TODO: find out if the user is a teacher or a student and save it in a
+    # session, remove login / view buttons from navbar for the logged in user
