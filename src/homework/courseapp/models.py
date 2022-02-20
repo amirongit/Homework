@@ -9,8 +9,7 @@ class Course(models.Model):
                                 null=False, blank=False)
 
     def __str__(self):
-        return f'{self.name} by {self.teacher.first_name} \
-{self.teacher.last_name}'
+        return f'{self.name} by {str(self.teacher)}'
 
 
 class PresentationStudentRel(models.Model):

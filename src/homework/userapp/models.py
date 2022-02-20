@@ -14,6 +14,9 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=8, choices=Types.choices,
                                  null=False, blank=False)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class TeacherManager(UserManager):
     def get_queryset(self, *args, **kwargs):
