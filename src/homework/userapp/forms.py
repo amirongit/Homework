@@ -19,5 +19,3 @@ class RegisterForm(UserCreationForm):
     last_name = forms.CharField(label='Last Name', max_length=150,
                                 required=True)
     email = forms.EmailField(label='Email', max_length=254, required=True)
-    user_type = forms.ChoiceField(label='Role', choices=[('t', 'Teacher'),
-                                                         ('s', 'Student')])
