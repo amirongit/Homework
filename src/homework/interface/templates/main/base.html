@@ -14,12 +14,33 @@
                 <li>
                     <a href="{% url 'interface:index' %}">Homepage</a>
                 </li>
-                <li>
-                    <a href="{% url 'userapp:register' %}">Register</a>
-                </li>
-                <li>
-                    <a href="{% url 'userapp:login' %}">Login</a>
-                </li>
+                {% if not request.user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'userapp:register' %}">Register</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'userapp:login' %}">Login</a>
+                    </li>
+                {% else %}
+                    {% if request.user.user_type == 'STUDENT' %}
+                        <li>
+                            <a href="#">My courses</a>
+                        </li>
+                        <li>
+                            <a href="#">Available courses</a>
+                        </li>
+                    {% elif request.user.user_type == 'TEACHER' %}
+                        <li>
+                            <a href="#">My courses</a>
+                        </li>
+                        <li>
+                            <a href="#">My presentations</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="#">Logout</a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="#">About</a>
                 </li>
