@@ -16,10 +16,8 @@ def register(request):
         if reg_form.is_valid() is not True:
             error(request, 'The form wasn\'t filled out properly.')
             return redirect(reverse('userapp:register'))
-        user_type = Teacher if reg_form.cleaned_data[
-            'user_type'] == 't' else Student
         try:
-            user_type(user_ptr=reg_form.save()).save_base(raw=True)
+            reg_form.save()
         except (IntegrityError, ValueError):
             error(request, 'The given values can\'t be used.')
             return redirect(reverse('userapp:register'))
