@@ -1,14 +1,23 @@
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 
-class RegisterForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=32, required=True)
-    first_name = forms.CharField(label='First Name', max_length=64,
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'password1', 'password2', 'first_name',
+                  'last_name', 'email', 'user_type')
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        for field in ['username', 'password1', 'password2']:
+            self.fields[field].help_text = None
+
+    first_name = forms.CharField(label='First Name', max_length=150,
                                  required=True)
-    last_name = forms.CharField(label='Last Name', max_length=64,
+    last_name = forms.CharField(label='Last Name', max_length=150,
                                 required=True)
-    email = forms.EmailField(label='Email', required=True)
-    password = forms.CharField(label='Password', widget=forms.PasswordInput,
-                               required=True)
+    email = forms.EmailField(label='Email', max_length=254, required=True)
     user_type = forms.ChoiceField(label='Role', choices=[('t', 'Teacher'),
                                                          ('s', 'Student')])
