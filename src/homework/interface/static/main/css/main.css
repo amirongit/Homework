@@ -36,3 +36,7 @@ header li a {
 form input {
     display: block;
 }
+
+form textarea {
+    display: block;
+}
