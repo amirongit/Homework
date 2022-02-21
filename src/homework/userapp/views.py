@@ -21,7 +21,7 @@ def register(request):
         except (IntegrityError, ValueError):
             error(request, 'The given values can\'t be used.')
             return redirect(reverse('userapp:register'))
-        success(request, 'The user was created succesfully.')
+        success(request, 'The user was created successfully.')
         return redirect(reverse('userapp:login'))
     reg_form = RegisterForm()
     return render(request, 'userapp/register.html', {'title': 'Register',
@@ -39,3 +39,6 @@ class LoginView_(LoginView):
 
 class LogoutView_(LoginRequiredMixin, LogoutView):
     pass
+
+
+# TODO: profile view
