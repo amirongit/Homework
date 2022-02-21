@@ -15,7 +15,8 @@ class User(AbstractUser):
                                  null=False, blank=False)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.get_user_type_display()}: \
+{self.first_name} {self.last_name}'
 
 
 class TeacherManager(UserManager):
