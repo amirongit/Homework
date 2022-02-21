@@ -18,7 +18,7 @@ class CourseModelTest(TestCase):
 
     def test_string_format(self):
         self.assertEqual(str(Course.objects.get(name='Dummy Course')),
-                         'Dummy Course by Dummy Teacher')
+                         'Dummy Course by Teacher: Dummy Teacher')
 
 
 class PresentationModelTest(TestCase):
