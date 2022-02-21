@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 {% block content %}
-<a href="#">add a course</a>
+<a href="{% url 'courseapp:course_create' %}">create a course</a>
 {% if course_set %}
     {% for course in course_set %}
         <br>
