@@ -5,6 +5,7 @@ from django.db import models
 
 class Course(models.Model):
     name = models.CharField('course name', max_length=128)
+    description = models.TextField(blank=False, null=False)
     teacher = models.ForeignKey('userapp.Teacher', on_delete=models.CASCADE,
                                 null=False, blank=False)
 
