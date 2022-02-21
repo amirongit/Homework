@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<a href="#">add a course</a>
+{% if course_set %}
+    {% for course in course_set %}
+        <br>
+        <h3>{{ course.name }}</h3>
+        <p>{{ course.description }}</p>
+        <br>
+        <a href="#">presentations of this course</a>
+    {% endfor %}
+{% endif %}
+{% endblock content %}
