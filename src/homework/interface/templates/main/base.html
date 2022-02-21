@@ -31,7 +31,7 @@
                         </li>
                     {% elif request.user.user_type == 'TEACHER' %}
                         <li>
-                            <a href="#">My courses</a>
+                            <a href="{% url 'courseapp:teacher_courses' %}">My courses</a>
                         </li>
                         <li>
                             <a href="#">My presentations</a>
