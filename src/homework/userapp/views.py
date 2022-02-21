@@ -1,4 +1,5 @@
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages import success, error
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
@@ -36,5 +37,5 @@ class LoginView_(LoginView):
         return cxt
 
 
-class LogoutView_(LogoutView):
+class LogoutView_(LoginRequiredMixin, LogoutView):
     pass
