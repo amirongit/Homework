@@ -7,32 +7,34 @@ from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .forms import RegisterForm
+from .forms import SignUpForm, SignInForm
 
 # Create your views here.
 
 
 @user_passes_test(lambda user: user.is_anonymous)
-def register(request):
+def sign_up(request):
     if request.method == 'POST':
-        reg_form = RegisterForm(request.POST)
-        if reg_form.is_valid() is not True:
-            error(request, 'The form wasn\'t filled out properly.')
-            return redirect(reverse('userapp:register'))
+        form = SignUpForm(request.POST)
+        if form.is_valid() is not True:
+            error(request, 'You didn\'t fill out the form properly.')
+            return redirect(reverse('userapp:sign_up'))
         try:
-            reg_form.save()
+            form.save()
         except (IntegrityError, ValueError):
-            error(request, 'The given values can\'t be used.')
-            return redirect(reverse('userapp:register'))
-        success(request, 'The user was created successfully.')
-        return redirect(reverse('userapp:login'))
-    reg_form = RegisterForm()
-    return render(request, 'userapp/register.html', {'title': 'Register',
-                                                     'form': reg_form})
+            error(request, 'We seem to be unable to create an account for you'
+                           'with these credentials.')
+            return redirect(reverse('userapp:sign_up'))
+        success(request, 'Your account was created successfully.')
+        return redirect(reverse('userapp:sign_in'))
+    form = SignUpForm()
+    return render(request, 'userapp/sign_up.html', {'title': 'Sign up',
+                                                    'form': form})
 
 
-class LoginView_(UserPassesTestMixin, AccessMixin, LoginView):
-    template_name = 'userapp/login.html'
+class SingInView(UserPassesTestMixin, AccessMixin, LoginView):
+    template_name = 'userapp/sign_in.html'
+    form_class = SignInForm
 
     def test_func(self):
         return self.request.user.is_anonymous
@@ -42,11 +44,11 @@ class LoginView_(UserPassesTestMixin, AccessMixin, LoginView):
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
-        cxt.update({'title': 'Login'})
+        cxt.update({'title': 'Sign in'})
         return cxt
 
 
-class LogoutView_(LoginRequiredMixin, LogoutView):
+class SignOutView(LoginRequiredMixin, LogoutView):
     pass
 
 
