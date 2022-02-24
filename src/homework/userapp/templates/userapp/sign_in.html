@@ -1,15 +1,7 @@
 {% extends 'main/base.html' %}
-{% block headtag %}
-    <style>
-        #login_form {
-            max-width: 50%;
-            margin: auto;
-        }
-    </style>
-{% endblock headtag %}
 {% block bodytag %}
     <h2 class="page-title">Login to your account</h2>
-    <form action="" method="POST" id="login_form">
+    <form action="" method="POST" class="compact-form">
         {% csrf_token %}
         <div class="mb-3">
             <label for="username" class="form-label">Username:</label>
