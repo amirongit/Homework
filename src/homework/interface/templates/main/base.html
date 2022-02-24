@@ -17,6 +17,10 @@
             text-align: center;
             padding: 1%;
         }
+        .compact-form {
+            max-width: 50%;
+            margin: auto;
+        }
     </style>
     {% block headtag %}
     {% endblock headtag %}
@@ -71,16 +75,24 @@
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search through courses" aria-label="Search">
                     <button class="btn btn-light btn-sm" type="submit">Search</button>
-                  </form>
+                </form>
             </div>
         </div>
     </nav>
-    <div class="container border-start border-end border-bottom border-2">
+    <div class="container">
         {% if messages %}
             {% for message in messages %}
                 <br>
                 <div class="alert alert-secondary compact-alert" role="alert">
                     {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if form.non_field_errors %}
+            {% for _, error in form.errors.items %}
+                <br>
+                <div class="alert alert-secondary compact-alert" role="alert">
+                    {{ error.as_text }}
                 </div>
             {% endfor %}
         {% endif %}
