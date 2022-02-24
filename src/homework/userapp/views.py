@@ -16,14 +16,14 @@ from .forms import SignUpForm, SignInForm
 def sign_up(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-        if form.is_valid() is not True:
-            error(request, 'You didn\'t fill out the form properly.')
+        if not form.is_valid():
+            error(request, '* You didn\'t fill out the form properly.')
             return redirect(reverse('userapp:sign_up'))
         try:
             form.save()
         except (IntegrityError, ValueError):
-            error(request, 'We seem to be unable to create an account for you'
-                           'with these credentials.')
+            error(request, '* We seem to be unable to create an account for'
+                           'you with these credentials.')
             return redirect(reverse('userapp:sign_up'))
         success(request, 'Your account was created successfully.')
         return redirect(reverse('userapp:sign_in'))
