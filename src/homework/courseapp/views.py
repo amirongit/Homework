@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.messages import error, success
 
 from userapp.models import Teacher, User
 
@@ -27,7 +28,15 @@ class TeacherCoursesView(LoginRequiredMixin, generic.ListView):
 @user_passes_test(generate_user_type_test(User.Types.TEACHER))
 def new_course(request):
     if request.method == 'POST':
-        pass
+        form = CourseCreationForm(request.POST)
+        if not form.is_valid():
+            error(request, '* You didn\'t fill out the form properly.')
+            return redirect(reverse('courseapp:teacher_new_course'))
+        course = form.save(commit=False)
+        course.teacher = request.user
+        course.save()
+        success(request, 'The course was added successfully.')
+        return redirect(reverse('courseapp:teacher_courses'))
     form = CourseCreationForm()
     return render(request, 'courseapp/new_course.html',
                   {'title': 'New course', 'form': form})
