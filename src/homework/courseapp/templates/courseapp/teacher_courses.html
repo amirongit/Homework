@@ -1,13 +1,25 @@
 {% extends 'main/base.html' %}
-{% block content %}
-<a href="{% url 'courseapp:course_create' %}">create a course</a>
-{% if course_set %}
-    {% for course in course_set %}
-        <br>
-        <h3>{{ course.name }}</h3>
-        <p>{{ course.description }}</p>
-        <br>
-        <a href="#">presentations of this course</a>
-    {% endfor %}
-{% endif %}
-{% endblock content %}
+{% block bodytag %}
+    <br>
+    <a href="{% url 'courseapp:teacher_new_course' %}" class="btn btn-dark">Add a new course</a>
+    <br>
+    <br>
+    {% if course_set %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for course in course_set %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.name }}</h5>
+                        <p class="card-text">{{ course.description }}</p>
+                        <a href="#" class="card-link btn btn-sm btn-secondary" role="btn">View details</a>
+                        <a href="#" class="card-link btn btn-sm btn-dark" role="btn">Edit</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <h2 class="page-title">You don't have any courses yet</h2>
+    {% endif %}
+{% endblock bodytag %}
