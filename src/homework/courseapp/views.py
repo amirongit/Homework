@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from userapp.models import Teacher, User
 
 from .forms import CourseInfoForm
+from .models import Course
 # Create your views here.
 
 
@@ -40,4 +41,25 @@ class NewCourseView(LoginRequiredMixin, UserPassesTestMixin,
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': 'New course'})
+        return cxt
+
+
+class CourseDetailView(generic.DetailView):
+    model = Course
+    template_name = 'courseapp/course_details.html'
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': self.object.name})
+        return cxt
+
+
+class CourseUpdateView(generic.UpdateView):
+    model = Course
+    form_class = CourseInfoForm
+    template_name = 'courseapp/update_course.html'
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': self.object.name})
         return cxt
