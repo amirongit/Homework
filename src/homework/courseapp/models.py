@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -11,6 +12,9 @@ class Course(models.Model):
 
     def __str__(self):
         return f'{self.name} by {str(self.teacher)}'
+
+    def get_absolute_url(self):
+        return reverse('courseapp:course_details', kwargs={'pk': self.id})
 
 
 class PresentationStudentRel(models.Model):
