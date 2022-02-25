@@ -39,7 +39,7 @@
                             <a class="nav-link active" aria-current="page" href="{% url 'userapp:sign_up' %}">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'userapp:sign_in' %}">Login</a>
+                            <a class="nav-link" href="{% url 'userapp:sign_in' %}">Sign in</a>
                         </li>
                     {% else %}
                         {% if request.user.user_type == 'STUDENT' %}
@@ -61,7 +61,7 @@
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="">Logout</a>
+                            <a class="nav-link" href="{% url 'userapp:sign_out' %}">Sign out</a>
                         </li>
                     {% endif %}
                     <li class="nav-item dropdown">
@@ -80,22 +80,6 @@
         </div>
     </nav>
     <div class="container">
-        {% if messages %}
-            {% for message in messages %}
-                <br>
-                <div class="alert alert-secondary compact-alert" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-        {% if form.non_field_errors %}
-            {% for _, error in form.errors.items %}
-                <br>
-                <div class="alert alert-secondary compact-alert" role="alert">
-                    {{ error.as_text }}
-                </div>
-            {% endfor %}
-        {% endif %}
         {% block bodytag %}
         {% endblock bodytag %}
         <br>
