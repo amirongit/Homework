@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+{% block bodytag %}
+    <h3>{{ course.name }}</h2> <span class="text-muted">by <a href="#" class="text-reset">{{ course.teacher.first_name}} {{ course.teacher.last_name }}</a></span>
+    <br>
+    <br>
+    <p>{{ course.description }}</p>
+    <br>
+    <br>
+    <a href="#" class="btn btn-sm btn-dark" role="button">Attend</a>
+{% endblock bodytag %}
