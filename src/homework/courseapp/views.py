@@ -1,14 +1,11 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.shortcuts import redirect
+from django.urls import reverse, reverse_lazy
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.messages import error, success
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from userapp.models import Teacher, User
 
-from .forms import CourseCreationForm
-from .utils import generate_user_type_test
+from .forms import CourseInfoForm
 # Create your views here.
 
 
@@ -25,18 +22,22 @@ class TeacherCoursesView(LoginRequiredMixin, generic.ListView):
         return cxt
 
 
-@user_passes_test(generate_user_type_test(User.Types.TEACHER))
-def new_course(request):
-    if request.method == 'POST':
-        form = CourseCreationForm(request.POST)
-        if not form.is_valid():
-            error(request, '* You didn\'t fill out the form properly.')
-            return redirect(reverse('courseapp:teacher_new_course'))
+class NewCourseView(LoginRequiredMixin, UserPassesTestMixin,
+                    generic.CreateView):
+    template_name = 'courseapp/new_course.html'
+    form_class = CourseInfoForm
+    success_url = reverse_lazy('courseapp:teacher_courses')
+
+    def test_func(self):
+        return self.request.user.user_type == User.Types.TEACHER
+
+    def form_valid(self, form):
         course = form.save(commit=False)
-        course.teacher = request.user
+        course.teacher = self.request.user
         course.save()
-        success(request, 'The course was added successfully.')
         return redirect(reverse('courseapp:teacher_courses'))
-    form = CourseCreationForm()
-    return render(request, 'courseapp/new_course.html',
-                  {'title': 'New course', 'form': form})
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': 'New course'})
+        return cxt
