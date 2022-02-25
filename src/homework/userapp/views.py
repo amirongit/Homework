@@ -18,6 +18,9 @@ class SignUpView(UserPassesTestMixin, generic.CreateView):
     def test_func(self):
         return self.request.user.is_anonymous
 
+    def handle_no_permission(self):
+        return redirect(reverse('interface:index'))
+
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': 'Sign up'})
