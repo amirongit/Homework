@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
     <br>
-    <a href="{% url 'courseapp:teacher_new_course' %}" class="btn btn-dark">Add a new course</a>
+    <a href="{% url 'courseapp:teacher_new_course' %}" class="btn btn-dark">Create a new course</a>
     <br>
     <br>
     {% if course_set %}
@@ -14,6 +14,7 @@
                         <p class="card-text">{{ course.description|slice:":64" }}...</p>
                         <a href="{% url 'courseapp:course_details' course.id %}" class="card-link btn btn-sm btn-secondary" role="btn">View details</a>
                         <a href="{% url 'courseapp:course_update' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Edit</a>
+                        <a href="{% url 'courseapp:course_new_presentation' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Add presentation</a>
                     </div>
                 </div>
             </div>
