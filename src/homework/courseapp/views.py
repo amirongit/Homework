@@ -2,11 +2,13 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import user_passes_test, login_required
 
 from userapp.models import Teacher, User, Student
 
 from .forms import CourseInfoForm, PresentationCreationForm
-from .models import Course
+from .models import Course, PresentationStudentRel, Presentation
+from .utils import generate_user_type_test
 # Create your views here.
 
 
@@ -76,8 +78,6 @@ class NewPresentationView(LoginRequiredMixin, UserPassesTestMixin,
                           generic.CreateView):
     template_name = 'courseapp/new_presentation.html'
     form_class = PresentationCreationForm
-    success_url = '/'
-    # TODO: change to presentation details after implementation
 
     def test_func(self):
         return (self.request.user.user_type == User.Types.TEACHER) and (
@@ -88,8 +88,8 @@ class NewPresentationView(LoginRequiredMixin, UserPassesTestMixin,
         presentation = form.save(commit=False)
         presentation.course = Course.objects.get(id=self.kwargs['course_id'])
         presentation.save()
-        return redirect('/')
-        # TODO: change to presentation details after implementation
+        return redirect(reverse('courseapp:course_details',
+                                kwargs=({'pk': self.kwargs['course_id']})))
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -97,3 +97,13 @@ class NewPresentationView(LoginRequiredMixin, UserPassesTestMixin,
                     'course_name': Course.objects.get(
                         id=self.kwargs['course_id']).name})
         return cxt
+
+
+@user_passes_test(generate_user_type_test(User.Types.STUDENT))
+@login_required
+def join_presentation(request, pk):
+    PresentationStudentRel.objects.create(
+        student=Student.objects.get(id=request.user.id),
+        presentation=Presentation.objects.get(id=pk))
+    return redirect('/')
+    # redirect to student course list after implementation
