@@ -5,6 +5,27 @@
     <br>
     <p>{{ course.description }}</p>
     <br>
-    <br>
-    <a href="#" class="btn btn-sm btn-dark" role="button">Attend</a>
+    <hr>
+    {% if course.presentation_set.all %}
+        <h4>Presentations</h4>
+        <table class="table">
+            <thead>
+                <th scope="col">Starting on</th>
+                <th scope="col">Ending on</th>
+            </thead>
+            <tbody>
+            {% for presentation in course.presentation_set.all %}
+                <tr>
+                    <td>{{ presentation.start_date }}</td>
+                    <td>{{ presentation.end_date }}</td>
+                    {% if user.is_anonymous or user.user_type == 'STUDENT' %}
+                        <td><a href="#" class="btn btn-sm btn-dark" role="button">Join</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4>This course is not being presented</h4>
+    {% endif %}
 {% endblock bodytag %}
