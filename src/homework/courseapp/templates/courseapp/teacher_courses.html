@@ -13,8 +13,8 @@
                         <h5 class="card-title">{{ course.name }}</h5>
                         <p class="card-text">{{ course.description|slice:":64" }}...</p>
                         <a href="{% url 'courseapp:course_details' course.id %}" class="card-link btn btn-sm btn-secondary" role="btn">View details</a>
-                        <a href="{% url 'courseapp:course_update' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Edit</a>
-                        <a href="{% url 'courseapp:course_new_presentation' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Add presentation</a>
+                        <a href="{% url 'courseapp:update_course' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Edit</a>
+                        <a href="{% url 'courseapp:new_presentation' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Add presentation</a>
                     </div>
                 </div>
             </div>
