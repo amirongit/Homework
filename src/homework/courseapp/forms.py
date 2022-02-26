@@ -1,9 +1,9 @@
-from django.forms import ModelForm
+from django import forms
 
-from .models import Course
+from .models import Course, Presentation
 
 
-class CourseInfoForm(ModelForm):
+class CourseInfoForm(forms.ModelForm):
     class Meta:
         model = Course
         exclude = ['teacher']
@@ -13,3 +13,14 @@ class CourseInfoForm(ModelForm):
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
         self.fields['description'].widget.attrs.update(
             {'class': 'form-control'})
+
+
+class PresentationCreationForm(forms.ModelForm):
+    class Meta:
+        model = Presentation
+        exclude = ['students', 'course']
+
+    start_date = forms.DateField(widget=forms.SelectDateWidget(
+        attrs={'class': 'form-select'}))
+    end_date = forms.DateField(widget=forms.SelectDateWidget(
+        attrs={'class': 'form-select'}))
