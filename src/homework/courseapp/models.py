@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -15,6 +16,13 @@ class Course(models.Model):
 
     def get_absolute_url(self):
         return reverse('courseapp:course_details', kwargs={'pk': self.id})
+
+    def get_active_presentations(self):
+        return self.presentation_set.filter(start_date__lte=now().date(),
+                                            end_date__gte=now().date())
+
+    def get_attendable_presentations(self):
+        return self.presentation_set.filter(start_date__gte=now().date())
 
 
 class PresentationStudentRel(models.Model):
