@@ -3,7 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from userapp.models import Teacher, User
+from userapp.models import Teacher, User, Student
 
 from .forms import CourseInfoForm, PresentationCreationForm
 from .models import Course
@@ -50,7 +50,14 @@ class CourseDetailView(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
-        cxt.update({'title': self.object.name})
+        if (not self.request.user.is_anonymous) and (
+                self.request.user.user_type == User.Types.STUDENT):
+            attended = Student.objects.get(
+                id=self.request.user.id).has_attended(Course.objects.get(
+                    id=self.object.id))
+        else:
+            attended = False
+        cxt.update({'title': self.object.name, 'attended': attended})
         return cxt
 
 
