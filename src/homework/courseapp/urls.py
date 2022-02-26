@@ -10,18 +10,16 @@ urlpatterns = [
              name='teacher_courses'),
         path('new_course/', views.NewCourseView.as_view(),
              name='teacher_new_course'),
-        path('course/', include([
-          path('update/<int:pk>/', views.CourseUpdateView.as_view(),
-               name='course_update'),
-          path('new_presentation/<int:course_id>/',
-               views.NewPresentationView.as_view(),
-               name='course_new_presentation')
-        ]))
-    ])),
+        path('update_course/<int:pk>/', views.CourseUpdateView.as_view(),
+             name='update_course'),
+        path('new_presentation/<int:course_id>/',
+             views.NewPresentationView.as_view(),
+             name='new_presentation')
+             ])),
     path('student/', include([
-    ])),
-    path('course/', include([
-        path('details/<int:pk>/', views.CourseDetailView.as_view(),
-             name='course_details'),
-    ])),
-]
+         path('join_presentation/<int:pk>/', views.join_presentation,
+              name='join_presentation')
+         ])),
+    path('details/<int:pk>/', views.CourseDetailView.as_view(),
+         name='course_details')
+     ]
