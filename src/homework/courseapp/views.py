@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from userapp.models import Teacher, User
 
-from .forms import CourseInfoForm
+from .forms import CourseInfoForm, PresentationCreationForm
 from .models import Course
 # Create your views here.
 
@@ -62,4 +62,31 @@ class CourseUpdateView(generic.UpdateView):
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': self.object.name})
+        return cxt
+
+
+class NewPresentationView(LoginRequiredMixin, UserPassesTestMixin,
+                          generic.CreateView):
+    template_name = 'courseapp/new_presentation.html'
+    form_class = PresentationCreationForm
+    success_url = '/'
+    # TODO: change to presentation details after implementation
+
+    def test_func(self):
+        return (self.request.user.user_type == User.Types.TEACHER) and (
+            Course.objects.get(
+                id=self.kwargs['course_id']).teacher == self.request.user)
+
+    def form_valid(self, form):
+        presentation = form.save(commit=False)
+        presentation.course = Course.objects.get(id=self.kwargs['course_id'])
+        presentation.save()
+        return redirect('/')
+        # TODO: change to presentation details after implementation
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': 'New presentation',
+                    'course_name': Course.objects.get(
+                        id=self.kwargs['course_id']).name})
         return cxt
