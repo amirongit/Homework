@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 
+from courseapp.models import PresentationStudentRel
 # Create your models here.
 
 
@@ -48,6 +49,10 @@ class Student(User):
         proxy = True
 
     objects = StudentManager()
+
+    def has_attended(self, course):
+        return PresentationStudentRel.objects.filter(
+            presentation__course=course).filter(student=self).exists()
 
     def save(self, *args, **kwargs):
         if not self.pk:
