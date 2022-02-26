@@ -39,17 +39,14 @@
                     {% else %}
                         {% if request.user.user_type == 'STUDENT' %}
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="">My courses</a>
+                                <a class="nav-link" aria-current="page" href="">Courses</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="">Profile</a>
                             </li>
                         {% elif request.user.user_type == 'TEACHER' %} 
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="{% url 'courseapp:teacher_courses' %}">My courses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="">My presentations</a>
+                                <a class="nav-link" aria-current="page" href="{% url 'courseapp:teacher_courses' %}">Courses</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="">Profile</a>
