@@ -141,12 +141,20 @@ class JoinPresentationView(StudnetOnlyViewMixin, generic.View):
     def test_func(self):
         return self.request.user.user_type == User.Types.STUDENT
 
-    def get(self):
-        course = Course.objects.get(id=self.kwargs['course_id'])
-        student = Student.objects.get(id=self.request.user.id)
-        prs_obj = PresentationStudentRel(student=student, course=course)
+    def get(self, request, pk):
+        presentation = Presentation.objects.get(id=pk)
+        student = Student.objects.get(id=request.user.id)
+        rel_obj = PresentationStudentRel(
+            student=student,
+            presentation=presentation
+            )
         try:
-            prs_obj.save()
-            return redirect(reverse('/'))  # change to dashboard later
+            rel_obj.save()
+            return redirect('/')  # change to dashboard later
         except IntegrityError:
-            return redirect(reverse('interface:index'))
+            return redirect(
+                reverse(
+                    'courseapp:course_details',
+                    kwargs=({'pk': presentation.course.id})
+                    )
+                )
