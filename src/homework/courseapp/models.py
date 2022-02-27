@@ -26,6 +26,9 @@ class Course(models.Model):
 
 
 class PresentationStudentRel(models.Model):
+    class Meta:
+        unique_together = ['student', 'presentation']
+
     student = models.ForeignKey('userapp.Student', on_delete=models.CASCADE)
     presentation = models.ForeignKey('courseapp.Presentation',
                                      on_delete=models.CASCADE)
