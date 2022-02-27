@@ -2,13 +2,11 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import user_passes_test, login_required
 
 from userapp.models import Teacher, User, Student
 
 from .forms import CourseInfoForm, PresentationCreationForm
-from .models import Course, PresentationStudentRel, Presentation
-from .utils import generate_user_type_test
+from .models import Course, Presentation
 # Create your views here.
 
 
