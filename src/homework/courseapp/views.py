@@ -2,12 +2,15 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db import IntegrityError
 
 from userapp.models import Teacher, User, Student
 
 from .forms import CourseInfoForm, PresentationCreationForm
-from .models import Course, Presentation
+from .models import Course, Presentation, PresentationStudentRel
 # Create your views here.
+
+# TODO: declare classes for teacher/student only mixins
 
 
 class TeacherCoursesView(LoginRequiredMixin, UserPassesTestMixin,
@@ -48,7 +51,7 @@ class NewCourseView(LoginRequiredMixin, UserPassesTestMixin,
         return cxt
 
 
-class CourseDetailView(generic.DetailView):
+class CourseDetailsView(generic.DetailView):
     model = Course
     template_name = 'courseapp/course_details.html'
 
@@ -111,10 +114,28 @@ class CoursePresentationsView(LoginRequiredMixin, UserPassesTestMixin,
             course=Course.objects.get(id=self.kwargs['pk']))
 
     def test_func(self):
-        return self.request.user.user_type == User.Types.TEACHER
+        return (self.request.user.user_type == User.Types.TEACHER) and (
+            Course.objects.get(
+                id=self.kwargs['pk']).teacher.id == self.request.user.id)
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': Course.objects.get(id=self.kwargs['pk']).name,
                     'course_id': self.kwargs['pk']})
         return cxt
+
+
+class JoinPresentationView(LoginRequiredMixin, UserPassesTestMixin,
+                           generic.View):
+    def test_func(self):
+        return self.request.user.user_type == User.Types.STUDENT
+
+    def get(self):
+        course = Course.objects.get(id=self.kwargs['course_id'])
+        student = Student.objects.get(id=self.request.user.id)
+        psr_obj = PresentationStudentRel(student=student, course=course)
+        try:
+            psr_obj.save()
+            return redirect(reverse('/'))  # change to dashboard later
+        except IntegrityError:
+            return redirect(reverse('interface:index'))
