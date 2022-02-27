@@ -1,22 +1,19 @@
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import (LoginRequiredMixin,
-                                        UserPassesTestMixin, AccessMixin)
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 from .forms import UserInfoForm, SignInForm
+from .utils import AnonymousOnlyViewMixin
 
 # Create your views here.
 
 
-class SignUpView(UserPassesTestMixin, generic.CreateView):
+class SignUpView(AnonymousOnlyViewMixin, generic.CreateView):
     template_name = 'userapp/sign_up.html'
     form_class = UserInfoForm
     success_url = reverse_lazy('userapp:sign_in')
-
-    def test_func(self):
-        return self.request.user.is_anonymous
 
     def handle_no_permission(self):
         return redirect(reverse('interface:index'))
@@ -27,12 +24,9 @@ class SignUpView(UserPassesTestMixin, generic.CreateView):
         return cxt
 
 
-class SingInView(UserPassesTestMixin, AccessMixin, LoginView):
+class SingInView(AnonymousOnlyViewMixin, AccessMixin, LoginView):
     template_name = 'userapp/sign_in.html'
     form_class = SignInForm
-
-    def test_func(self):
-        return self.request.user.is_anonymous
 
     def handle_no_permission(self):
         return redirect(reverse('interface:index'))
