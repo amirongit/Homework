@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% block bodytag %}
+    <br>
+    <a href="{% url 'courseapp:new_presentation' course_id %}" class="btn btn-dark">Add a new presentation</a>
+    <br>
+    <br>
+    {% if presentation_set %}
+        <table class="table">
+            <thead>
+                <th scope="col">#</th>
+                <th scope="col">Start date</th>
+                <th scope="col">End date</th>
+            </thead>
+            <tbody>
+                {% for presentation in presentation_set %}
+                    <tr>
+                        <td>{{ presentation.id }}</td>
+                        <td>{{ presentation.start_date }}</td>
+                        <td>{{ presentation.end_date }}</td>
+                        <td><a href="#" class="btn btn-sm btn-dark" role="button">Manage</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4>This course is not being presented</h4>
+    {% endif %}
+{% endblock bodytag %}
