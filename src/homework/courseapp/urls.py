@@ -6,15 +6,21 @@ app_name = 'courseapp'
 
 urlpatterns = [
     path('teacher/', include([
-        path('courses/', views.TeacherCoursesView.as_view(),
+        path('courses/',
+             views.TeacherCoursesView.as_view(),
              name='teacher_courses'),
-        path('new_course/', views.NewCourseView.as_view(),
-             name='teacher_new_course'),
-        path('update_course/<int:pk>/', views.CourseUpdateView.as_view(),
+        path('new_course/',
+             views.NewCourseView.as_view(),
+             name='new_course'),
+        path('update_course/<int:pk>/',
+             views.CourseUpdateView.as_view(),
              name='update_course'),
         path('new_presentation/<int:course_id>/',
              views.NewPresentationView.as_view(),
-             name='new_presentation')
+             name='new_presentation'),
+        path('course_presentations/<int:pk>/',
+             views.CoursePresentationsView.as_view(),
+             name='course_presentations')
              ])),
     path('student/', include([
          ])),
