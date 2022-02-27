@@ -1,28 +1,24 @@
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import IntegrityError
 
 from userapp.models import Teacher, User, Student
+from userapp.utils import StudnetOnlyViewMixin, TeacherOnlyViewMixin
 
 from .forms import CourseInfoForm, PresentationCreationForm
 from .models import Course, Presentation, PresentationStudentRel
 # Create your views here.
 
-# TODO: declare classes for teacher/student only mixins
 
-
-class TeacherCoursesView(LoginRequiredMixin, UserPassesTestMixin,
-                         generic.ListView):
+class TeacherCoursesView(TeacherOnlyViewMixin, generic.ListView):
     template_name = 'courseapp/teacher_courses.html'
     context_object_name = 'course_set'
 
     def get_queryset(self):
-        return Teacher.objects.get(pk=self.request.user.id).course_set.all()
-
-    def test_func(self):
-        return self.request.user.user_type == User.Types.TEACHER
+        return Teacher.objects.get(
+            pk=self.request.user.id
+            ).course_set.all()
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -30,14 +26,9 @@ class TeacherCoursesView(LoginRequiredMixin, UserPassesTestMixin,
         return cxt
 
 
-class NewCourseView(LoginRequiredMixin, UserPassesTestMixin,
-                    generic.CreateView):
+class NewCourseView(TeacherOnlyViewMixin, generic.CreateView):
     template_name = 'courseapp/new_course.html'
     form_class = CourseInfoForm
-    success_url = reverse_lazy('courseapp:teacher_courses')
-
-    def test_func(self):
-        return self.request.user.user_type == User.Types.TEACHER
 
     def form_valid(self, form):
         course = form.save(commit=False)
@@ -57,21 +48,31 @@ class CourseDetailsView(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
-        if (not self.request.user.is_anonymous) and (
-                self.request.user.user_type == User.Types.STUDENT):
+        if (
+            not self.request.user.is_anonymous) and (
+                self.request.user.user_type == User.Types.STUDENT
+                ):
             attended = Student.objects.get(
-                id=self.request.user.id).has_attended(Course.objects.get(
-                    id=self.object.id))
+                id=self.request.user.id
+                ).has_attended(Course.objects.get(
+                    id=self.object.id
+                    ))
         else:
             attended = False
         cxt.update({'title': self.object.name, 'attended': attended})
         return cxt
 
 
-class CourseUpdateView(generic.UpdateView):
+class CourseUpdateView(TeacherOnlyViewMixin, generic.UpdateView):
     model = Course
     form_class = CourseInfoForm
     template_name = 'courseapp/update_course.html'
+
+    def test_func(self, *args, **kwargs):
+        result = super().test_func(*args, **kwargs)
+        return (
+            self.get_object().teacher.id == self.request.user.id
+            ) and result
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -79,33 +80,41 @@ class CourseUpdateView(generic.UpdateView):
         return cxt
 
 
-class NewPresentationView(LoginRequiredMixin, UserPassesTestMixin,
-                          generic.CreateView):
+class NewPresentationView(TeacherOnlyViewMixin, generic.CreateView):
     template_name = 'courseapp/new_presentation.html'
     form_class = PresentationCreationForm
 
-    def test_func(self):
-        return (self.request.user.user_type == User.Types.TEACHER) and (
+    def test_func(self, *args, **kwargs):
+        result = super().test_func(*args, **kwargs)
+        return (
             Course.objects.get(
-                id=self.kwargs['course_id']).teacher == self.request.user)
+                id=self.kwargs['course_id']
+                ).teacher == self.request.user
+                ) and result
 
     def form_valid(self, form):
         presentation = form.save(commit=False)
         presentation.course = Course.objects.get(id=self.kwargs['course_id'])
         presentation.save()
-        return redirect(reverse('courseapp:course_details',
-                                kwargs=({'pk': self.kwargs['course_id']})))
+        return redirect(
+            reverse(
+                'courseapp:course_details',
+                kwargs=({'pk': self.kwargs['course_id']})
+                )
+                )
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
-        cxt.update({'title': 'New presentation',
-                    'course_name': Course.objects.get(
-                        id=self.kwargs['course_id']).name})
+        cxt.update(
+            {'title': 'New presentation',
+             'course_name': Course.objects.get(
+                id=self.kwargs['course_id']
+                ).name}
+                    )
         return cxt
 
 
-class CoursePresentationsView(LoginRequiredMixin, UserPassesTestMixin,
-                              generic.ListView):
+class CoursePresentationsView(TeacherOnlyViewMixin, generic.ListView):
     template_name = 'courseapp/course_presentations.html'
     context_object_name = 'presentation_set'
 
@@ -113,10 +122,13 @@ class CoursePresentationsView(LoginRequiredMixin, UserPassesTestMixin,
         return Presentation.objects.filter(
             course=Course.objects.get(id=self.kwargs['pk']))
 
-    def test_func(self):
-        return (self.request.user.user_type == User.Types.TEACHER) and (
+    def test_func(self, *args, **kwargs):
+        result = super().test_func(*args, **kwargs)
+        return (
             Course.objects.get(
-                id=self.kwargs['pk']).teacher.id == self.request.user.id)
+                id=self.kwargs['pk']
+                ).teacher.id == self.request.user.id
+                ) and result
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -125,8 +137,7 @@ class CoursePresentationsView(LoginRequiredMixin, UserPassesTestMixin,
         return cxt
 
 
-class JoinPresentationView(LoginRequiredMixin, UserPassesTestMixin,
-                           generic.View):
+class JoinPresentationView(StudnetOnlyViewMixin, generic.View):
     def test_func(self):
         return self.request.user.user_type == User.Types.STUDENT
 
