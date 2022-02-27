@@ -12,12 +12,16 @@ from .utils import generate_user_type_test
 # Create your views here.
 
 
-class TeacherCoursesView(LoginRequiredMixin, generic.ListView):
+class TeacherCoursesView(LoginRequiredMixin, UserPassesTestMixin,
+                         generic.ListView):
     template_name = 'courseapp/teacher_courses.html'
     context_object_name = 'course_set'
 
     def get_queryset(self):
         return Teacher.objects.get(pk=self.request.user.id).course_set.all()
+
+    def test_func(self):
+        return self.request.user.user_type == User.Types.TEACHER
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -96,4 +100,23 @@ class NewPresentationView(LoginRequiredMixin, UserPassesTestMixin,
         cxt.update({'title': 'New presentation',
                     'course_name': Course.objects.get(
                         id=self.kwargs['course_id']).name})
+        return cxt
+
+
+class CoursePresentationsView(LoginRequiredMixin, UserPassesTestMixin,
+                              generic.ListView):
+    template_name = 'courseapp/course_presentations.html'
+    context_object_name = 'presentation_set'
+
+    def get_queryset(self):
+        return Presentation.objects.filter(
+            course=Course.objects.get(id=self.kwargs['pk']))
+
+    def test_func(self):
+        return self.request.user.user_type == User.Types.TEACHER
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': Course.objects.get(id=self.kwargs['pk']).name,
+                    'course_id': self.kwargs['pk']})
         return cxt
