@@ -17,8 +17,6 @@ urlpatterns = [
              name='new_presentation')
              ])),
     path('student/', include([
-         path('join_presentation/<int:pk>/', views.join_presentation,
-              name='join_presentation')
          ])),
     path('details/<int:pk>/', views.CourseDetailView.as_view(),
          name='course_details')

@@ -97,13 +97,3 @@ class NewPresentationView(LoginRequiredMixin, UserPassesTestMixin,
                     'course_name': Course.objects.get(
                         id=self.kwargs['course_id']).name})
         return cxt
-
-
-@user_passes_test(generate_user_type_test(User.Types.STUDENT))
-@login_required
-def join_presentation(request, pk):
-    PresentationStudentRel.objects.create(
-        student=Student.objects.get(id=request.user.id),
-        presentation=Presentation.objects.get(id=pk))
-    return redirect('/')
-    # redirect to student course list after implementation
