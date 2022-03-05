@@ -20,7 +20,10 @@ urlpatterns = [
              name='new_presentation'),
         path('course_presentations/<int:pk>/',
              views.CoursePresentationsView.as_view(),
-             name='course_presentations')
+             name='course_presentations'),
+        path('manage_presentation/<int:pk>/',
+             views.ManagePresentationView.as_view(),
+             name='manage_presentation')
              ])),
     path('student/', include([
          path('join_presentation/<int:pk>/',
