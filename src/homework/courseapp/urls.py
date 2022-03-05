@@ -23,7 +23,10 @@ urlpatterns = [
              name='course_presentations'),
         path('manage_presentation/<int:pk>/',
              views.ManagePresentationView.as_view(),
-             name='manage_presentation')
+             name='manage_presentation'),
+        path('new_homework/<int:presentation_id>/',
+             views.NewHomeworkView.as_view(),
+             name='new_homework')
              ])),
     path('student/', include([
          path('join_presentation/<int:pk>/',
