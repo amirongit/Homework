@@ -27,7 +27,10 @@ class Course(models.Model):
 
 class PresentationStudentRel(models.Model):
     class Meta:
-        unique_together = ['student', 'presentation']
+        constraints = [
+            models.UniqueConstraint(fields=['student', 'presentation'],
+                                    name='unique attend')
+        ]
 
     student = models.ForeignKey('userapp.Student', on_delete=models.CASCADE)
     presentation = models.ForeignKey('courseapp.Presentation',
