@@ -61,6 +61,16 @@ class Presentation(models.Model):
         through=PresentationStudentRel
         )
 
+    def is_active(self):
+        return (
+            self.start_date <= now().date()
+            ) and (
+                self.end_date >= now().date()
+                )
+
+    def is_attendable(self):
+        return self.start_date >= now().date()
+
     def __str__(self):
         return f'{str(self.course)}: {self.start_date} - {self.end_date}'
 
