@@ -1,8 +1,10 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
+    <br>
     <h3>{{ teacher }}</h2>
+    <br>
     <hr>
-    {% if teacher.course_set %}
+    {% if teacher.course_set.all %}
         <h4>Courses</h4>
         <table class="table">
             <thead>
