@@ -7,17 +7,20 @@
     {% if presentation_set %}
         <table class="table">
             <thead>
-                <th scope="col">#</th>
                 <th scope="col">Start date</th>
                 <th scope="col">End date</th>
             </thead>
             <tbody>
                 {% for presentation in presentation_set %}
                     <tr>
-                        <td>{{ presentation.id }}</td>
                         <td>{{ presentation.start_date }}</td>
                         <td>{{ presentation.end_date }}</td>
-                        <td><a href="{% url 'courseapp:manage_presentation' presentation.id %}" class="btn btn-sm btn-dark" role="button">Manage</a></td>
+                        {% if presentation.is_active %}
+                            <td><a href="{% url 'courseapp:manage_presentation' presentation.id %}" class="btn btn-sm btn-dark" role="button">Manage</a></td>
+                        {% else %}
+                            <td><a href="{% url 'courseapp:manage_presentation' presentation.id %}" class="btn btn-sm btn-dark disabled" role="button" aria-disabled="true">Manage</a></td>
+                        {% endif %}
+                        <td><a href="#" class="btn btn-sm btn-dark" role="button">Details</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
