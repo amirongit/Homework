@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
-    <h3>{{ teacher.first_name }} {{ teacher.last_name }}</h2>
+    <h3>{{ teacher }}</h2>
     <hr>
     {% if teacher.course_set %}
         <h4>Courses</h4>
@@ -23,6 +23,6 @@
             </tbody>
         </table>
     {% else %}
-        <h4>This teacher doesn't have any courses yet.</h4>
+        <h4>No available courses found</h4>
     {% endif %}
 {% endblock bodytag %}
