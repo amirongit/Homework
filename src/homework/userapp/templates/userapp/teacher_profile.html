@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% block bodytag %}
+    <h3>{{ teacher.first_name }} {{ teacher.last_name }}</h2>
+    <hr>
+    {% if teacher.course_set %}
+        <h4>Courses</h4>
+        <table class="table">
+            <thead>
+                <th scope="col">Name</th>
+                <th scope="col">Details</th>
+            </thead>
+            <tbody>
+                {% for course in teacher.course_set.all %}
+                    <tr>
+                        <td>{{ course.name }}</td>
+                        {% if course.get_attendable_presentations %}
+                            <td><a href="{% url 'courseapp:course_details' course.id %}" class="btn btn-sm btn-dark" role="button">Details</a></td>
+                        {% else %}
+                            <td><a href="{% url 'courseapp:course_details' course.id %}" class="btn btn-sm btn-light" role="button">Details</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4>This teacher doesn't have any courses yet.</h4>
+    {% endif %}
+{% endblock bodytag %}
