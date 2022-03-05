@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Course, Presentation
+from .models import Course, Homework, Presentation
 
 
 class CourseInfoForm(forms.ModelForm):
@@ -24,3 +24,15 @@ class PresentationCreationForm(forms.ModelForm):
         attrs={'class': 'form-select'}))
     end_date = forms.DateField(widget=forms.SelectDateWidget(
         attrs={'class': 'form-select'}))
+
+
+class HomeworkCreationForm(forms.ModelForm):
+    class Meta:
+        model = Homework
+        exclude = ['presentation', 'answers']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['description'].widget.attrs.update(
+            {'class': 'form-control'})
