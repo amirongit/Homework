@@ -158,3 +158,19 @@ class JoinPresentationView(StudnetOnlyViewMixin, generic.View):
                     kwargs=({'pk': presentation.course.id})
                     )
                 )
+
+
+class ManagePresentationView(TeacherOnlyViewMixin, generic.DetailView):
+    model = Presentation
+    template_name = 'courseapp/manage_presentation.html'
+
+    def test_func(self, *args, **kwargs):
+        result = super().test_func(*args, **kwargs)
+        return (
+            self.get_object().course.teacher.id == self.request.user.id
+        ) and result
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': self.object.course.name})
+        return cxt
