@@ -1,13 +1,13 @@
+from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import generic
-from django.db import IntegrityError
-
-from userapp.models import Teacher, User, Student
+from userapp.models import Student, Teacher, User
 from userapp.utils import StudnetOnlyViewMixin, TeacherOnlyViewMixin
 
 from .forms import CourseInfoForm, PresentationCreationForm
 from .models import Course, Presentation, PresentationStudentRel
+
 # Create your views here.
 
 

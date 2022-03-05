@@ -2,9 +2,10 @@ from datetime import timedelta
 
 from django.test import TestCase
 from django.utils.timezone import now
+from userapp.models import Teacher
 
 from .models import Course, Presentation
-from userapp.models import Teacher
+
 # Create your tests here.
 
 

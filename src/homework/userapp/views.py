@@ -1,12 +1,12 @@
+from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from .forms import UserInfoForm, SignInForm
-from .utils import AnonymousOnlyViewMixin
+from .forms import SignInForm, UserInfoForm
 from .models import Teacher
+from .utils import AnonymousOnlyViewMixin
 
 # Create your views here.
 
