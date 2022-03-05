@@ -31,7 +31,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {% if not request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'userapp:sign_up' %}">Register</a>
+                            <a class="nav-link active" aria-current="page" href="{% url 'userapp:sign_up' %}">Sign up</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'userapp:sign_in' %}">Sign in</a>
