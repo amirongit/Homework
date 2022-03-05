@@ -17,12 +17,12 @@
                         <td>{{ presentation.id }}</td>
                         <td>{{ presentation.start_date }}</td>
                         <td>{{ presentation.end_date }}</td>
-                        <td><a href="#" class="btn btn-sm btn-dark" role="button">Manage</a></td>
+                        <td><a href="{% url 'courseapp:manage_presentation' presentation.id %}" class="btn btn-sm btn-dark" role="button">Manage</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <h4>This course is not being presented</h4>
+        <h2>This course is not being presented</h2>
     {% endif %}
 {% endblock bodytag %}
