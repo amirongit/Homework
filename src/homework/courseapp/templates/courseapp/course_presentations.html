@@ -1,9 +1,9 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
     <br>
-    <a href="{% url 'courseapp:new_presentation' course_id %}" class="btn btn-dark">Add a new presentation</a>
+    <a href="{% url 'courseapp:new_presentation' course_id %}" class="btn btn-dark">New presentation</a>
     <br>
-    <br>
+    <hr>
     {% if presentation_set %}
         <table class="table">
             <thead>
@@ -23,6 +23,6 @@
             </tbody>
         </table>
     {% else %}
-        <h2>This course is not being presented</h2>
+        <h4>No available presentations found</h4>
     {% endif %}
 {% endblock bodytag %}

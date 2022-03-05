@@ -1,19 +1,19 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
     <br>
-    <a href="{% url 'courseapp:new_course' %}" class="btn btn-dark">Create a new course</a>
+    <a href="{% url 'courseapp:new_course' %}" class="btn btn-dark">New course</a>
     <br>
-    <br>
+    <hr>
     {% if course_set %}
     <div class="row row-cols-1 row-cols-md-2 g-4">
         {% for course in course_set %}
             <div class="col" >
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ course.name }}</h5>
+                        <h5 class="card-title">{{ course }}</h5>
                         <p class="card-text">{{ course.description|slice:":64" }}...</p>
-                        <a href="{% url 'courseapp:course_details' course.id %}" class="card-link btn btn-sm btn-secondary" role="btn">View details</a>
-                        <a href="{% url 'courseapp:update_course' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Edit</a>
+                        <a href="{% url 'courseapp:course_details' course.id %}" class="card-link btn btn-sm btn-secondary" role="btn">Details</a>
+                        <a href="{% url 'courseapp:update_course' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Update</a>
                         <a href="{% url 'courseapp:course_presentations' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Presentations</a>
                     </div>
                 </div>
@@ -21,6 +21,6 @@
         {% endfor %}
     </div>
     {% else %}
-        <h2>You don't have any courses yet</h2>
+        <h4>No available courses found</h4>
     {% endif %}
 {% endblock bodytag %}

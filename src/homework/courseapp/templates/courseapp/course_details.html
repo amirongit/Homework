@@ -1,10 +1,11 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
-    <h2>{{ course.name }}</h2>
-    <span class="text-muted">by <a href="{% url 'userapp:teacher_profile' course.teacher.id %}" class="text-reset">{{ course.teacher.first_name}} {{ course.teacher.last_name }}</a></span>
+    <h2>{{ course }}</h2>
+    <span class="text-muted">by <a href="{% url 'userapp:teacher_profile' course.teacher.id %}" class="text-reset">{{ course.teacher }}</a></span>
     <br>
-    <br>
+    <hr>
     <p>{{ course.description }}</p>
+    <br>
     <hr>
     {% if course.get_attendable_presentations %}
         {% if user.is_anonymous or user.user_type == 'TEACHER' %}
@@ -36,15 +37,14 @@
                             <td>{{ presentation.start_date }}</td>
                             <td>{{ presentation.end_date }}</td>
                             <td><a href="{% url 'courseapp:join_presentation' presentation.id %}" class="btn btn-sm btn-dark" role="button">Attend</a></td>
-                                                 
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            <h4>You have already taken this course</h4>
+            <h4>Course already taken</h4>
         {% endif %}
     {% else %}
-        <h4>This course is not being presented</h4>
+        <h4>No available presentations found</h4>
     {% endif %}
 {% endblock bodytag %}
