@@ -6,6 +6,7 @@ from django.views import generic
 
 from .forms import UserInfoForm, SignInForm
 from .utils import AnonymousOnlyViewMixin
+from .models import Teacher
 
 # Create your views here.
 
@@ -41,4 +42,15 @@ class SignOutView(LoginRequiredMixin, LogoutView):
     pass
 
 
-# TODO: profile view
+class TeacherProfileView(generic.DetailView):
+    model = Teacher
+    template_name = 'userapp/teacher_profile.html'
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update(
+            {
+                'title': f'{self.object.first_name} {self.object.last_name}'
+                }
+            )
+        return cxt
