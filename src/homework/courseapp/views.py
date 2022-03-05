@@ -5,8 +5,9 @@ from django.views import generic
 from userapp.models import Student, Teacher, User
 from userapp.utils import StudnetOnlyViewMixin, TeacherOnlyViewMixin
 
-from .forms import CourseInfoForm, PresentationCreationForm
-from .models import Course, Presentation, PresentationStudentRel
+from .forms import (CourseInfoForm, HomeworkCreationForm,
+                    PresentationCreationForm)
+from .models import Course, Homework, Presentation, PresentationStudentRel
 
 # Create your views here.
 
@@ -119,8 +120,9 @@ class CoursePresentationsView(TeacherOnlyViewMixin, generic.ListView):
     context_object_name = 'presentation_set'
 
     def get_queryset(self):
-        return Presentation.objects.filter(
-            course=Course.objects.get(id=self.kwargs['pk']))
+        return Course.objects.get(
+            id=self.kwargs['pk']
+            ).presentation_set.all()
 
     def test_func(self, *args, **kwargs):
         result = super().test_func(*args, **kwargs)
@@ -174,3 +176,33 @@ class ManagePresentationView(TeacherOnlyViewMixin, generic.DetailView):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': self.object.course.name})
         return cxt
+
+
+class NewHomeworkView(TeacherOnlyViewMixin, generic.CreateView):
+    model = Homework
+    template_name = 'courseapp/new_homework.html'
+    form_class = HomeworkCreationForm
+
+    def test_func(self, *args, **kwargs):
+        result = super().test_func(*args, **kwargs)
+        return (
+            Presentation.objects.get(
+                id=self.kwargs['presentation_id']
+                ).course.teacher.id == self.request.user.id
+        ) and result
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': 'New homework'})
+        return cxt
+
+    def form_valid(self, form):
+        homework = form.save(commit=False)
+        homework.presentation = Presentation.objects.get(
+            id=self.kwargs['presentation_id']
+            )
+        homework.save()
+        return redirect(reverse(
+            'courseapp:manage_presentation',
+            kwargs={'pk': self.kwargs['presentation_id']})
+            )
