@@ -90,6 +90,6 @@ class Homework(models.Model):
         on_delete=models.CASCADE
         )
     answers = models.ManyToManyField(
-        'courseapp.Student',
+        'userapp.Student',
         through=HomeworkStudentRel
         )
