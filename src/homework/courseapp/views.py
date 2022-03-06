@@ -3,11 +3,12 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import generic
 from userapp.models import Student, Teacher, User
-from userapp.utils import StudnetOnlyViewMixin, TeacherOnlyViewMixin
+from userapp.utils import StudentOnlyViewMixin, TeacherOnlyViewMixin
 
-from .forms import (CourseInfoForm, HomeworkCreationForm,
+from .forms import (AnswerSubmitionForm, CourseInfoForm, HomeworkCreationForm,
                     PresentationCreationForm)
-from .models import Course, Homework, Presentation, PresentationStudentRel
+from .models import (Course, Homework, HomeworkStudentRel, Presentation,
+                     PresentationStudentRel)
 
 # Create your views here.
 
@@ -55,7 +56,7 @@ class CourseDetailsView(generic.DetailView):
                 ):
             attended = Student.objects.get(
                 id=self.request.user.id
-                ).has_attended(Course.objects.get(
+                ).has_taken(Course.objects.get(
                     id=self.object.id
                     ))
         else:
@@ -139,7 +140,7 @@ class CoursePresentationsView(TeacherOnlyViewMixin, generic.ListView):
         return cxt
 
 
-class JoinPresentationView(StudnetOnlyViewMixin, generic.View):
+class JoinPresentationView(StudentOnlyViewMixin, generic.View):
     def test_func(self):
         return self.request.user.user_type == User.Types.STUDENT
 
@@ -206,3 +207,38 @@ class NewHomeworkView(TeacherOnlyViewMixin, generic.CreateView):
             'courseapp:manage_presentation',
             kwargs={'pk': self.kwargs['presentation_id']})
             )
+
+
+class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
+    model = HomeworkStudentRel
+    template_name = 'courseapp/submit_answer.html'
+    form_class = AnswerSubmitionForm
+
+    def test_func(self, *args, **kwargs):
+        if super().test_func(*args, **kwargs):
+            homework = Homework.objects.get(id=self.kwargs['homework_id'])
+            student = Student.objects.get(id=self.request.user.id)
+            return (
+                student.has_attended(homework.presentation)
+            ) and (
+                not HomeworkStudentRel.objects.filter(
+                    homework=homework
+                    ).filter(
+                        student=student
+                        ).exists()
+                )
+        return False
+
+    def form_valid(self, form):
+        answer = form.save(commit=False)
+        answer.homework = Homework.objects.get(id=self.kwargs['homework_id'])
+        answer.student = Student.objects.get(id=self.request.user.id)
+        answer.save()
+        return redirect('/')  # change to dashboard later
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update(
+            {'title': f'{Homework.objects.get(id=self.kwargs["homework_id"])}'}
+                    )
+        return cxt
