@@ -53,10 +53,15 @@ class Student(User):
 
     objects = StudentManager()
 
-    def has_attended(self, course):
+    def has_taken(self, course):
         return PresentationStudentRel.objects.filter(
             presentation__course=course
             ).filter(student=self).exists()
+
+    def has_attended(self, presentation):
+        return PresentationStudentRel.objects.filter(
+            presentation=presentation
+        ).filter(student=self).exists()
 
     def save(self, *args, **kwargs):
         if not self.pk:
