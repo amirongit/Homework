@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+{% block bodytag %}
+    <h2 class="page-title">Submit answer</h2>
+    <hr>
+    <form action="" method="POST" class="compact-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="answer" class="form-label">Answer:</label>
+            {{ form.answer }}
+        </div>
+        <input type="submit" class="btn btn-dark btn-sm" value="Submit">
+    </form>
+{% endblock bodytag %}
