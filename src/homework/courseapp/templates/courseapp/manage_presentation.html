@@ -35,7 +35,11 @@
             <tbody>
                 {% for student in presentation.students.all %}
                     <td>{{ student }}</td>
-                    <td>{{ student.grade }}</td>
+                    {% if studnet.grade %}
+                        <td>{{ student.grade }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
                     <td><a href="#" class="btn btn-sm btn-dark" role="button">Update</a></td>
                 {% endfor %}
             </tbody>
