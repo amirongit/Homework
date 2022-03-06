@@ -103,3 +103,6 @@ class Homework(models.Model):
         'userapp.Student',
         through=HomeworkStudentRel
         )
+
+    def __str__(self):
+        return self.title
