@@ -1,8 +1,6 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
-    <br>
     <a href="{% url 'courseapp:new_presentation' course_id %}" class="btn btn-dark">New presentation</a>
-    <br>
     <hr>
     {% if presentation_set %}
         <table class="table">

@@ -1,11 +1,11 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
-    <br>
     <a href="{% url 'courseapp:new_homework' presentation.id %}" class="btn btn-dark">New homework</a>
     <br>
+    <br>
+    <h4>Homeworks</h4>
     <hr>
     {% if presentation.homework_set.all %}
-        <h4>Homeworks</h4>
         <table class="table">
             <thead>
                 <th scope="col">Title</th>
@@ -23,9 +23,9 @@
         <h4>No available homeworks found</h4>
     {% endif %}
     <br>
+    <h4>Students</h4>
     <hr>
     {% if presentation.students.all %}
-        <h4>Students</h4>
         <table class="table">
             <thead>
                 <th scope="col">Name</th>

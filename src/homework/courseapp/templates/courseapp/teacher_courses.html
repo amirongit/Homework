@@ -1,8 +1,6 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
-    <br>
     <a href="{% url 'courseapp:new_course' %}" class="btn btn-dark">New course</a>
-    <br>
     <hr>
     {% if course_set %}
     <div class="row row-cols-1 row-cols-md-2 g-4">

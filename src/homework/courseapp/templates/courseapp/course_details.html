@@ -2,14 +2,13 @@
 {% block bodytag %}
     <h2>{{ course }}</h2>
     <span class="text-muted">by <a href="{% url 'userapp:teacher_profile' course.teacher.id %}" class="text-reset">{{ course.teacher }}</a></span>
-    <br>
     <hr>
     <p>{{ course.description }}</p>
     <br>
+    <h4>Presentations</h4>
     <hr>
     {% if course.get_attendable_presentations %}
         {% if user.is_anonymous or user.user_type == 'TEACHER' %}
-            <h4>Presentations</h4>
             <table class="table">
                 <thead>
                     <th scope="col">Start date</th>

@@ -1,29 +1,25 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
-    <br>
-    <h3>{{ teacher }}</h2>
-    <br>
+    <h4>Courses by {{ teacher }}</h4>
     <hr>
     {% if teacher.course_set.all %}
-        <h4>Courses</h4>
-        <table class="table">
-            <thead>
-                <th scope="col">Name</th>
-                <th scope="col">Details</th>
-            </thead>
-            <tbody>
-                {% for course in teacher.course_set.all %}
-                    <tr>
-                        <td>{{ course.name }}</td>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for course in teacher.course_set.all %}
+            <div class="col" >
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course }}</h5>
+                        <p class="card-text">{{ course.description|slice:":64" }}...</p>
                         {% if course.get_attendable_presentations %}
                             <td><a href="{% url 'courseapp:course_details' course.id %}" class="btn btn-sm btn-dark" role="button">Details</a></td>
                         {% else %}
                             <td><a href="{% url 'courseapp:course_details' course.id %}" class="btn btn-sm btn-light" role="button">Details</a></td>
                         {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     {% else %}
         <h4>No available courses found</h4>
     {% endif %}
