@@ -6,19 +6,20 @@
     <h4>Homeworks</h4>
     <hr>
     {% if presentation.homework_set.all %}
-        <table class="table">
-            <thead>
-                <th scope="col">Title</th>
-                <th scope="col">Number of answers</th>
-            </thead>
-            <tbody>
-                {% for homework in presentation.homework_set.all %}
-                    <td>{{ homework.title }}</td>
-                    <td>{{ homework.answers.count }}</td>
-                    <td><a href="#" class="btn btn-sm btn-dark" role="button">Details</a></td>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for homework in presentation.homework_set.all %}
+                <div class="col" >
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ homework }}</h5>
+                            <p class="card-text">{{ homework.description|slice:":64" }}...</p>
+                            <p class="text-muted">{{ homework.answers.count }} answers</p>
+                            <a href="#" class="btn btn-sm btn-dark" role="button">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
         <h4>No available homeworks found</h4>
     {% endif %}
