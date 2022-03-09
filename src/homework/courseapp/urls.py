@@ -27,7 +27,10 @@ urlpatterns = [
                 name='manage_presentation'),
            path('new_homework/<int:presentation_id>/',
                 views.NewHomeworkView.as_view(),
-                name='new_homework')
+                name='new_homework'),
+           path('homework_details/<int:pk>/',
+                views.HomeworkDetailsView.as_view(),
+                name='homework_details')
           ]
                )),
     path('student/', include(
