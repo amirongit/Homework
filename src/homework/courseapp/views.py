@@ -71,10 +71,9 @@ class CourseUpdateView(TeacherOnlyViewMixin, generic.UpdateView):
     template_name = 'courseapp/update_course.html'
 
     def test_func(self, *args, **kwargs):
-        result = super().test_func(*args, **kwargs)
-        return (
-            self.get_object().teacher.id == self.request.user.id
-            ) and result
+        if super().test_func(*args, **kwargs):
+            return self.get_object().teacher.id == self.request.user.id
+        return False
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -87,12 +86,11 @@ class NewPresentationView(TeacherOnlyViewMixin, generic.CreateView):
     form_class = PresentationCreationForm
 
     def test_func(self, *args, **kwargs):
-        result = super().test_func(*args, **kwargs)
-        return (
-            Course.objects.get(
-                id=self.kwargs['course_id']
-                ).teacher == self.request.user
-                ) and result
+        if super().test_func(*args, **kwargs):
+            return Course.objects.get(
+                   id=self.kwargs['course_id']
+                   ).teacher == self.request.user
+        return False
 
     def form_valid(self, form):
         presentation = form.save(commit=False)
@@ -126,12 +124,11 @@ class CoursePresentationsView(TeacherOnlyViewMixin, generic.ListView):
             ).presentation_set.all()
 
     def test_func(self, *args, **kwargs):
-        result = super().test_func(*args, **kwargs)
-        return (
-            Course.objects.get(
-                id=self.kwargs['pk']
-                ).teacher.id == self.request.user.id
-                ) and result
+        if super().test_func(*args, **kwargs):
+            return Course.objects.get(
+                   id=self.kwargs['pk']
+                   ).teacher.id == self.request.user.id
+        return False
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -141,8 +138,14 @@ class CoursePresentationsView(TeacherOnlyViewMixin, generic.ListView):
 
 
 class JoinPresentationView(StudentOnlyViewMixin, generic.View):
-    def test_func(self):
-        return self.request.user.user_type == User.Types.STUDENT
+    def test_func(self, *args, **kwargs):
+        if super().test_func(*args, **kwargs):
+            return not Student.objects.get(
+                id=self.request.user.id
+                ).has_attended(
+                    Presentation.objects.get(id=self.kwargs['pk'])
+                )
+        return False
 
     def get(self, request, pk):
         presentation = Presentation.objects.get(id=pk)
@@ -168,10 +171,9 @@ class ManagePresentationView(TeacherOnlyViewMixin, generic.DetailView):
     template_name = 'courseapp/manage_presentation.html'
 
     def test_func(self, *args, **kwargs):
-        result = super().test_func(*args, **kwargs)
-        return (
-            self.get_object().course.teacher.id == self.request.user.id
-        ) and result
+        if super().test_func(*args, **kwargs):
+            return self.get_object().course.teacher.id == self.request.user.id
+        return False
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -185,12 +187,11 @@ class NewHomeworkView(TeacherOnlyViewMixin, generic.CreateView):
     form_class = HomeworkCreationForm
 
     def test_func(self, *args, **kwargs):
-        result = super().test_func(*args, **kwargs)
-        return (
-            Presentation.objects.get(
-                id=self.kwargs['presentation_id']
-                ).course.teacher.id == self.request.user.id
-        ) and result
+        if super().test_func(*args, **kwargs):
+            return Presentation.objects.get(
+                   id=self.kwargs['presentation_id']
+                   ).course.teacher.id == self.request.user.id
+        return False
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
