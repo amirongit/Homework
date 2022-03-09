@@ -46,7 +46,7 @@ class PresentationStudentRel(models.Model):
         'courseapp.Presentation',
         on_delete=models.CASCADE
         )
-    grade = models.IntegerField('course grade', blank=True, null=True)
+    grade = models.IntegerField(blank=False, null=False, default=0)
 
 
 class Presentation(models.Model):
