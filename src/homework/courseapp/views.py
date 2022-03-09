@@ -24,7 +24,7 @@ class TeacherCoursesView(TeacherOnlyViewMixin, generic.ListView):
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
-        cxt.update({'title': 'My courses'})
+        cxt.update({'title': 'Courses'})
         return cxt
 
 
@@ -242,4 +242,20 @@ class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
         cxt.update(
             {'title': f'{Homework.objects.get(id=self.kwargs["homework_id"])}'}
                     )
+        return cxt
+
+
+class HomeworkDetailsView(TeacherOnlyViewMixin, generic.DetailView):
+    model = Homework
+    template_name = 'courseapp/homework_details.html'
+
+    def test_func(self, *args, **kwargs):
+        if super().test_func(*args, **kwargs):
+            return self.get_object(
+            ).presentation.course.teacher.id == self.request.user.id
+        return False
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': f'{self.get_object().title}'})
         return cxt
