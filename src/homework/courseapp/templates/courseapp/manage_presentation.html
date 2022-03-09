@@ -14,7 +14,7 @@
                             <h5 class="card-title">{{ homework }}</h5>
                             <p class="card-text">{{ homework.description|slice:":64" }}...</p>
                             <p class="text-muted">{{ homework.answers.count }} answers</p>
-                            <a href="#" class="btn btn-sm btn-dark" role="button">Details</a>
+                            <a href="{% url 'courseapp:homework_details' homework.id %}" class="btn btn-sm btn-dark" role="button">Details</a>
                         </div>
                     </div>
                 </div>
@@ -33,13 +33,9 @@
                 <th scope="col">Grade</th>
             </thead>
             <tbody>
-                {% for student in presentation.students.all %}
-                    <td>{{ student }}</td>
-                    {% if studnet.grade %}
-                        <td>{{ student.grade }}</td>
-                    {% else %}
-                        <td>-</td>
-                    {% endif %}
+                {% for student in presentation.presentationstudentrel_set.all %}
+                    <td>{{ student.student }}</td>
+                    <td>{{ student.grade }}</td>
                     <td><a href="#" class="btn btn-sm btn-dark" role="button">Update</a></td>
                 {% endfor %}
             </tbody>
