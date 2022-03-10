@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% block bodytag %}
+    {% if course_set %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for course in course_set %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.course }}</h5>
+                            <span class="card-text text-muted">{{ course.start_date }} - {{ course.end_date }}</span>
+                            <br>
+                            <p class="card-text">{{ course.course.description|slice:":64" }}...</p>
+                            <a href="" class="card-link btn btn-sm btn-dark" role="btn">Homeworks</a>
+                            <a href="" class="card-link btn btn-sm btn-dark" role="btn">Lectures</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h4>No available courses found</h4>
+    {% endif %}
+{% endblock bodytag %}
