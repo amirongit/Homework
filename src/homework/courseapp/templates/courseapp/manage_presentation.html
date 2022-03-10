@@ -36,7 +36,8 @@
                 {% for student in presentation.presentationstudentrel_set.all %}
                     <td>{{ student.student }}</td>
                     <td>{{ student.grade }}</td>
-                    <td><a href="#" class="btn btn-sm btn-dark" role="button">Update</a></td>
+                    <td><a href="{% url 'courseapp:update_grade' student.id %}" class="btn btn-sm btn-dark" role="button">Update</a></td>
+                    <td><a href="{% url 'courseapp:attendancy_details' student.id %}" class="btn btn-sm btn-secondary" role="button">Details</a></td>
                 {% endfor %}
             </tbody>
         </table>
