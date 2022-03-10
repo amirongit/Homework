@@ -140,11 +140,13 @@ class CoursePresentationsView(TeacherOnlyViewMixin, generic.ListView):
 class JoinPresentationView(StudentOnlyViewMixin, generic.View):
     def test_func(self, *args, **kwargs):
         if super().test_func(*args, **kwargs):
-            return not Student.objects.get(
-                id=self.request.user.id
-                ).has_attended(
-                    Presentation.objects.get(id=self.kwargs['pk'])
-                )
+            student = Student.objects.get(id=self.request.user.id)
+            presentation = Presentation.objects.get(id=self.kwargs['pk'])
+            return (
+                not student.has_attended(presentation)
+                ) and (
+                    not student.has_taken(presentation.course)
+                    )
         return False
 
     def get(self, request, pk):
@@ -294,4 +296,21 @@ class AttendancyDetailsView(TeacherOnlyViewMixin, generic.DetailView):
                     )
                 }
         )
+        return cxt
+
+
+class StudentCoursesView(StudentOnlyViewMixin, generic.ListView):
+    template_name = 'courseapp/student_courses.html'
+    context_object_name = 'course_set'
+
+    def get_queryset(self):
+        return Presentation.objects.filter(
+            presentationstudentrel__student=Student.objects.get(
+                id=self.request.user.id
+            )
+            )
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': 'Courses'})
         return cxt
