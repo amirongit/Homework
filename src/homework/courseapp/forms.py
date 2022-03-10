@@ -1,6 +1,7 @@
 from django import forms
 
-from .models import Course, Homework, HomeworkStudentRel, Presentation
+from .models import (Course, Homework, HomeworkStudentRel, Presentation,
+                     PresentationStudentRel)
 
 
 class CourseInfoForm(forms.ModelForm):
@@ -56,3 +57,13 @@ class AnswerSubmitionForm(forms.ModelForm):
         self.fields['answer'].widget.attrs.update(
             {'class': 'form-control'}
             )
+
+
+class GradeUpdateForm(forms.ModelForm):
+    class Meta:
+        model = PresentationStudentRel
+        exclude = ['student', 'presentation']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['grade'].widget.attrs.update({'class': 'form-control'})
