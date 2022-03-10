@@ -46,7 +46,10 @@ urlpatterns = [
                 name='join_presentation'),
            path('submit_answer/<int:homework_id>/',
                 views.SubmitAnswerView.as_view(),
-                name='submit_answer')
+                name='submit_answer'),
+           path('courses/',
+                views.StudentCoursesView.as_view(),
+                name='student_courses')
           ]
                )),
     path('course_details/<int:pk>/', views.CourseDetailsView.as_view(),
