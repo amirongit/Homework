@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 {% block bodytag %}
-    <h2 class="page-title">{{ homework.title }}</h2>
+    <h2>{{ homework.title }}</h2>
+    <p>{{ homework.description }}</p>
     <hr>
     {% if homework.answers.all %}
         {% for answer in homework.homeworkstudentrel_set.all %}
