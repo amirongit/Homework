@@ -5,8 +5,8 @@ from django.views import generic
 from userapp.models import Student, Teacher, User
 from userapp.utils import StudentOnlyViewMixin, TeacherOnlyViewMixin
 
-from .forms import (AnswerSubmitionForm, CourseInfoForm, HomeworkCreationForm,
-                    PresentationCreationForm)
+from .forms import (AnswerSubmitionForm, CourseInfoForm, GradeUpdateForm,
+                    HomeworkCreationForm, PresentationCreationForm)
 from .models import (Course, Homework, HomeworkStudentRel, Presentation,
                      PresentationStudentRel)
 
@@ -258,4 +258,40 @@ class HomeworkDetailsView(TeacherOnlyViewMixin, generic.DetailView):
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': f'{self.get_object().title}'})
+        return cxt
+
+
+class UpdateGradeView(TeacherOnlyViewMixin, generic.UpdateView):
+    model = PresentationStudentRel
+    form_class = GradeUpdateForm
+    template_name = 'courseapp/update_grade.html'
+
+    def test_func(self, *args, **kwargs):
+        if super().test_func(*args, **kwargs):
+            return self.get_object(
+            ).presentation.course.teacher.id == self.request.user.id
+        return False
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': f'Update {self.get_object().student}'})
+        return cxt
+
+
+class AttendancyDetailsView(TeacherOnlyViewMixin, generic.DetailView):
+    model = PresentationStudentRel
+    template_name = 'courseapp/attendancy_details.html'
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update(
+            {
+                'title': f'{self.get_object().student}',
+                'homework_set': HomeworkStudentRel.objects.filter(
+                    homework__presentation=self.get_object().presentation
+                    ).filter(
+                        student=self.get_object().student
+                    )
+                }
+        )
         return cxt
