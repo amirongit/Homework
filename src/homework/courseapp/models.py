@@ -48,6 +48,9 @@ class PresentationStudentRel(models.Model):
         )
     grade = models.IntegerField(blank=False, null=False, default=0)
 
+    def get_absolute_url(self):
+        return reverse('courseapp:attendancy_details', kwargs={'pk': self.id})
+
 
 class Presentation(models.Model):
     start_date = models.DateField('start date', null=False, blank=False)
