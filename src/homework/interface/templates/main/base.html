@@ -39,7 +39,7 @@
                     {% else %}
                         {% if request.user.user_type == 'STUDENT' %}
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="">Courses</a>
+                                <a class="nav-link" aria-current="page" href="{% url 'courseapp:student_courses' %}">Courses</a>
                             </li>
                         {% elif request.user.user_type == 'TEACHER' %} 
                             <li class="nav-item">
