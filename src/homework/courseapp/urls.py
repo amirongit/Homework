@@ -30,7 +30,13 @@ urlpatterns = [
                 name='new_homework'),
            path('homework_details/<int:pk>/',
                 views.HomeworkDetailsView.as_view(),
-                name='homework_details')
+                name='homework_details'),
+           path('update_grade/<int:pk>/',
+                views.UpdateGradeView.as_view(),
+                name='update_grade'),
+           path('attendancy_details/<int:pk>/',
+                views.AttendancyDetailsView.as_view(),
+                name='attendancy_details')
           ]
                )),
     path('student/', include(
