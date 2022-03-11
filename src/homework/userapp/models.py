@@ -13,8 +13,7 @@ class User(AbstractUser):
         STUDENT = ('STUDENT', 'Student')
 
     user_type = models.CharField(
-        max_length=8, choices=Types.choices,
-        null=False, blank=False
+        max_length=8, choices=Types.choices, null=False, blank=False
         )
 
     def __str__(self):
