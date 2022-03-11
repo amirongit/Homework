@@ -305,7 +305,7 @@ class StudentCoursesView(StudentOnlyViewMixin, generic.ListView):
 
     def get_queryset(self):
         return Presentation.objects.filter(
-            presentationstudentrel__student=Student.objects.get(
+            presentationstudentrel_set__student=Student.objects.get(
                 id=self.request.user.id
             )
             )
