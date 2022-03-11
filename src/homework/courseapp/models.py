@@ -7,13 +7,11 @@ from django.utils.timezone import now
 
 class Course(models.Model):
     name = models.CharField(
-        'course name', max_length=128, unique=True,
-        blank=False, null=False
+        'course name', max_length=128, unique=True, blank=False, null=False
                             )
     description = models.TextField(blank=False, null=False)
     teacher = models.ForeignKey(
-        'userapp.Teacher', on_delete=models.CASCADE,
-        null=False, blank=False
+        'userapp.Teacher', on_delete=models.CASCADE, null=False, blank=False
         )
 
     def __str__(self):
@@ -24,8 +22,7 @@ class Course(models.Model):
 
     def get_active_presentations(self):
         return self.presentation_set.filter(
-            start_date__lte=now().date(),
-            end_date__gte=now().date()
+            start_date__lte=now().date(), end_date__gte=now().date()
             )
 
     def get_attendable_presentations(self):
@@ -36,15 +33,13 @@ class PresentationStudentRel(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['student', 'presentation'],
-                name='unique attendancy'
+                fields=['student', 'presentation'], name='unique attendancy'
                 )
         ]
 
     student = models.ForeignKey('userapp.Student', on_delete=models.CASCADE)
     presentation = models.ForeignKey(
-        'courseapp.Presentation',
-        on_delete=models.CASCADE
+        'courseapp.Presentation', on_delete=models.CASCADE
         )
     grade = models.IntegerField(blank=False, null=False, default=0)
 
@@ -56,18 +51,14 @@ class Presentation(models.Model):
     start_date = models.DateField('start date', null=False, blank=False)
     end_date = models.DateField('end date', null=False, blank=False)
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, null=False,
-        blank=False
+        'courseapp.Course', on_delete=models.CASCADE, null=False, blank=False
         )
     students = models.ManyToManyField(
-        'userapp.Student',
-        through=PresentationStudentRel
+        'userapp.Student', through=PresentationStudentRel
         )
 
     def is_active(self):
-        return (
-            self.start_date <= now().date()
-            ) and (
+        return (self.start_date <= now().date()) and (
                 self.end_date >= now().date()
                 )
 
@@ -82,15 +73,15 @@ class HomeworkStudentRel(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['student', 'homework'],
-                name='unique answer'
+                fields=['student', 'homework'], name='unique answer'
                 )
         ]
 
-    student = models.ForeignKey('userapp.Student', on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        'userapp.Student', on_delete=models.CASCADE, blank=False, null=False
+        )
     homework = models.ForeignKey(
-        'courseapp.Homework',
-        on_delete=models.CASCADE
+        'courseapp.Homework', on_delete=models.CASCADE, blank=False, null=False
         )
     answer = models.TextField(blank=False, null=False)
 
@@ -99,12 +90,10 @@ class Homework(models.Model):
     title = models.CharField(max_length=128, blank=False, null=False)
     description = models.TextField(blank=False, null=False)
     presentation = models.ForeignKey(
-        'courseapp.Presentation',
-        on_delete=models.CASCADE
+        'courseapp.Presentation', on_delete=models.CASCADE
         )
     answers = models.ManyToManyField(
-        'userapp.Student',
-        through=HomeworkStudentRel
+        'userapp.Student', through=HomeworkStudentRel
         )
 
     def __str__(self):
