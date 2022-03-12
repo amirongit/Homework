@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import (Course, Homework, HomeworkStudentRel, Presentation,
-                     PresentationStudentRel)
+                     PresentationStudentRel, Lecture)
 
 
 class CourseInfoForm(forms.ModelForm):
@@ -15,6 +15,17 @@ class CourseInfoForm(forms.ModelForm):
         self.fields['description'].widget.attrs.update(
             {'class': 'form-control'}
             )
+
+
+class LectureInforForm(forms.ModelForm):
+    class Meta:
+        model = Lecture
+        exclude = ['presentation']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['text'].widget.attrs.update({'class': 'form-control'})
 
 
 class PresentationCreationForm(forms.ModelForm):
