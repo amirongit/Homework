@@ -6,7 +6,8 @@ from userapp.models import Student, Teacher, User
 from userapp.utils import StudentOnlyViewMixin, TeacherOnlyViewMixin
 
 from .forms import (AnswerSubmitionForm, CourseInfoForm, GradeUpdateForm,
-                    HomeworkCreationForm, PresentationCreationForm)
+                    HomeworkCreationForm, LectureInforForm,
+                    PresentationCreationForm)
 from .models import (Course, Homework, HomeworkStudentRel, Presentation,
                      PresentationStudentRel)
 
@@ -91,7 +92,7 @@ class NewPresentationView(TeacherOnlyViewMixin, generic.CreateView):
         presentation.course = Course.objects.get(id=self.kwargs['course_id'])
         presentation.save()
         return redirect(
-            reverse('courseapp:course_details', kwargs=(
+            reverse('courseapp:course_presentations', kwargs=(
                 {'pk': self.kwargs['course_id']}
                 ))
                 )
@@ -300,4 +301,31 @@ class PresentationDashboardView(StudentOnlyViewMixin, generic.DetailView):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': self.get_object().course.name,
                     'student': Student.objects.get(id=self.request.user.id)})
+        return cxt
+
+
+class NewLectureView(TeacherOnlyViewMixin, generic.CreateView):
+    template_name = 'courseapp/new_lecture.html'
+    form_class = LectureInforForm
+
+    def test_func(self, *args, **kwargs):
+        if super().test_func(*args, **kwargs):
+            return Presentation.objects.get(id=self.kwargs[
+                'presentation_id'
+                ]).course.teacher.id == self.request.user.id
+        return False
+
+    def form_valid(self, form):
+        lecture = form.save(commit=False)
+        lecture.presentation = Presentation.objects.get(id=self.kwargs[
+            'presentation_id'
+            ])
+        lecture.save()
+        return redirect(reverse('courseapp:manage_presentation', kwargs={
+            'pk': self.kwargs['presentation_id']
+            }))
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': 'New lecture'})
         return cxt
