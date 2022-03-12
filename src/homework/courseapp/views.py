@@ -48,16 +48,14 @@ class CourseDetailsView(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
-        if (
-            not self.request.user.is_anonymous) and (
+        if (not self.request.user.is_anonymous) and (
                 self.request.user.user_type == User.Types.STUDENT
                 ):
-            attended = Student.objects.get(id=self.request.user.id).has_taken(
+            taken = Student.objects.get(id=self.request.user.id).has_taken(
                 Course.objects.get(id=self.object.id)
                 )
-        else:
-            attended = False
-        cxt.update({'title': self.object.name, 'attended': attended})
+            cxt.update({'taken': taken})
+        cxt.update({'title': self.object.name})
         return cxt
 
 
