@@ -98,3 +98,11 @@ class Homework(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Lecture(models.Models):
+    title = models.CharField(max_length=128, blank=False, null=False)
+    text = models.TextField(blank=False, null=False)
+    presentation = models.ForeignKey(
+        'courseapp.Presentation', on_delete=models.CASCADE
+        )
