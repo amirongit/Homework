@@ -1,4 +1,4 @@
-from courseapp.models import PresentationStudentRel
+from courseapp.models import PresentationStudentRel, HomeworkStudentRel
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 
@@ -60,7 +60,12 @@ class Student(User):
     def has_attended(self, presentation):
         return PresentationStudentRel.objects.filter(
             presentation=presentation
-        ).filter(student=self).exists()
+            ).filter(student=self).exists()
+
+    def has_answered(self, homework):
+        return HomeworkStudentRel.objects.filter(homework=homework).filter(
+            student=self
+            ).exists()
 
     def save(self, *args, **kwargs):
         if not self.pk:
