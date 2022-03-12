@@ -49,7 +49,10 @@ urlpatterns = [
                 name='submit_answer'),
            path('courses/',
                 views.StudentCoursesView.as_view(),
-                name='student_courses')
+                name='student_courses'),
+           path('course_dashboard/<int:pk>/',
+                views.PresentationDashboardView.as_view(),
+                name='course_dashboard')
           ]
                )),
     path('course_details/<int:pk>/', views.CourseDetailsView.as_view(),
