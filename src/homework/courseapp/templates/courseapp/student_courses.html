@@ -9,7 +9,7 @@
                             <h5 class="card-title">{{ course.course }}</h5>
                             <span class="card-text text-muted">{{ course.start_date }} - {{ course.end_date }}</span>
                             <br>
-                            <p class="card-text">{{ course.course.description|slice:":64" }}...</p>
+                            <p class="card-text">{{ course.course.description|slice:":256" }}...</p>
                             <a href="" class="card-link btn btn-sm btn-dark" role="btn">Homeworks</a>
                             <a href="" class="card-link btn btn-sm btn-dark" role="btn">Lectures</a>
                         </div>
