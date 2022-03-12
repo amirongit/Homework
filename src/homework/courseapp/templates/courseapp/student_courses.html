@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load model_tags %}
 {% block bodytag %}
     {% if course_set %}
         <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -10,7 +11,11 @@
                             <span class="card-text text-muted">{{ course.start_date }} - {{ course.end_date }}</span>
                             <br>
                             <p class="card-text">{{ course.course.description|truncatechars:256 }}</p>
-                            <a href="{% url 'courseapp:course_dashboard' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Dashboard</a>
+                            {% if course|presentation_has_ended %}
+                                <a href="{% url 'courseapp:certificate_details' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Certificate</a>
+                            {% else %}
+                                <a href="{% url 'courseapp:course_dashboard' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Dashboard</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
