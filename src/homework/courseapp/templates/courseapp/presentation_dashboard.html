@@ -24,4 +24,24 @@
     {% else %}
         <h4>No available homeworks found</h4>
     {% endif %}
+    <br>
+    <h4>Lectures</h4>
+    <hr>
+    {% if presentation.lecture_set.all %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for lecture in presentation.lecture_set.all %}
+            <div class="col" >
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ lecture }}</h5>
+                        <p class="card-text">{{ lecture.text|truncatechars:256 }}</p>
+                        <a href="#" class="btn btn-sm btn-secondary" role="button">Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <h4>No lectures homeworks found</h4>
+    {% endif %}
 {% endblock bodytag %}
