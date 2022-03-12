@@ -1,6 +1,8 @@
 from django.db import IntegrityError
+from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.timezone import now
 from django.views import generic
 from userapp.models import Student, Teacher, User
 from userapp.utils import StudentOnlyViewMixin, TeacherOnlyViewMixin
@@ -338,4 +340,19 @@ class LectureDetailsView(generic.DetailView):
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': self.object.title})
+        return cxt
+
+
+class CertificateDetailsView(generic.DetailView):
+    model = PresentationStudentRel
+    template_name = 'courseapp/certificate_details.html'
+
+    def get(self, *args, **kwargs):
+        if self.get_object().presentation.end_date > now().date():
+            raise Http404
+        return super().get(*args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': self.object.presentation.course.name})
         return cxt
