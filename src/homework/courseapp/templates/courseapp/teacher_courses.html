@@ -9,7 +9,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ course }}</h5>
-                        <p class="card-text">{{ course.description|slice:":256" }}...</p>
+                        <p class="card-text">{{ course.description|truncatechars:256 }}</p>
                         <a href="{% url 'courseapp:course_details' course.id %}" class="card-link btn btn-sm btn-secondary" role="btn">Details</a>
                         <a href="{% url 'courseapp:update_course' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Update</a>
                         <a href="{% url 'courseapp:course_presentations' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Presentations</a>

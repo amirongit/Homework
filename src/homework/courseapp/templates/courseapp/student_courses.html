@@ -9,9 +9,8 @@
                             <h5 class="card-title">{{ course.course }}</h5>
                             <span class="card-text text-muted">{{ course.start_date }} - {{ course.end_date }}</span>
                             <br>
-                            <p class="card-text">{{ course.course.description|slice:":256" }}...</p>
-                            <a href="" class="card-link btn btn-sm btn-dark" role="btn">Homeworks</a>
-                            <a href="" class="card-link btn btn-sm btn-dark" role="btn">Lectures</a>
+                            <p class="card-text">{{ course.course.description|truncatechars:256 }}</p>
+                            <a href="{% url 'courseapp:course_dashboard' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Dashboard</a>
                         </div>
                     </div>
                 </div>
