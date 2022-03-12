@@ -1,0 +1,9 @@
+{% extends 'main/base.html' %}
+{% block bodytag %}
+    <h2>{{ presentationstudentrel.course }} certificate</h2>
+    <hr>
+    <p>
+        We confirm that {{ presentationstudentrel.student }} has taken {{ presentationstudentrel.presentation.course }} course on Homework platform.<br>
+        issued on: {{ presentationstudentrel.presentation.end_date }}
+    </p>
+{% endblock bodytag %}
