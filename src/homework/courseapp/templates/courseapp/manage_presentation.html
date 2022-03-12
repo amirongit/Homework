@@ -8,13 +8,13 @@
     {% if presentation.homework_set.all %}
         <div class="row row-cols-1 row-cols-md-2 g-4">
             {% for homework in presentation.homework_set.all %}
-                <div class="col" >
+                <div class="col">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ homework }}</h5>
                             <p class="card-text">{{ homework.description|truncatechars:256 }}</p>
                             <p class="text-muted">{{ homework.answers.count }} answers</p>
-                            <a href="{% url 'courseapp:homework_details' homework.id %}" class="btn btn-sm btn-dark" role="button">Details</a>
+                            <a href="{% url 'courseapp:homework_details' homework.id %}" class="btn btn-sm btn-secondary" role="button">Details</a>
                         </div>
                     </div>
                 </div>
@@ -22,6 +22,28 @@
         </div>
     {% else %}
         <h4>No available homeworks found</h4>
+    {% endif %}
+    <br>
+    <a href="{% url 'courseapp:new_lecture' presentation.id %}" class="btn btn-dark">New lecture</a>
+    <br>
+    <br>
+    <h4>Lectures</h4>
+    <hr>
+    {% if presentation.lecture_set.all %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for lecture in presentation.lecture_set.all %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ lecture.title }}</h5>
+                            <p class="card-text">{{ lecture.text|truncatechars:256 }}</p>
+                            <a href="#" class="btn btn-sm btn-secondary" role="button">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
     {% endif %}
     <br>
     <h4>Students</h4>
