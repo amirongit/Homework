@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% block bodytag %}
+    <h2 class="page-title">New lecture</h2>
+    <hr>
+    <form action="" method="POST" class="compact-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+            <label for="text" class="form-label">Text:</label>
+            {{ form.text }}
+        </div>
+        <input type="submit" class="btn btn-dark btn-sm" value="Add">
+    </form>
+{% endblock bodytag %}
