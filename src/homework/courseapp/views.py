@@ -290,3 +290,14 @@ class StudentCoursesView(StudentOnlyViewMixin, generic.ListView):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': 'Courses'})
         return cxt
+
+
+class PresentationDashboardView(StudentOnlyViewMixin, generic.DetailView):
+    model = Presentation
+    template_name = 'courseapp/presentation_dashboard.html'
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': self.get_object().course.name,
+                    'student': Student.objects.get(id=self.request.user.id)})
+        return cxt
