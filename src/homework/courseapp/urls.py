@@ -54,5 +54,7 @@ urlpatterns = [
           ]
                )),
     path('course_details/<int:pk>/', views.CourseDetailsView.as_view(),
-         name='course_details')
+         name='course_details'),
+    path('lecture_details/<int:pk>/', views.LectureDetailsView.as_view(),
+         name='lecture_details')
      ]
