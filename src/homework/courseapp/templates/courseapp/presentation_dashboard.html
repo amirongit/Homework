@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ lecture }}</h5>
                         <p class="card-text">{{ lecture.text|truncatechars:256 }}</p>
-                        <a href="#" class="btn btn-sm btn-secondary" role="button">Details</a>
+                        <a href="{% url 'courseapp:lecture_details' lecture.id %}" class="btn btn-sm btn-secondary" role="button">Details</a>
                     </div>
                 </div>
             </div>
