@@ -8,8 +8,8 @@ from userapp.utils import StudentOnlyViewMixin, TeacherOnlyViewMixin
 from .forms import (AnswerSubmitionForm, CourseInfoForm, GradeUpdateForm,
                     HomeworkCreationForm, LectureInforForm,
                     PresentationCreationForm)
-from .models import (Course, Homework, HomeworkStudentRel, Presentation,
-                     PresentationStudentRel)
+from .models import (Course, Homework, HomeworkStudentRel, Lecture,
+                     Presentation, PresentationStudentRel)
 
 # Create your views here.
 
@@ -328,4 +328,14 @@ class NewLectureView(TeacherOnlyViewMixin, generic.CreateView):
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': 'New lecture'})
+        return cxt
+
+
+class LectureDetailsView(generic.DetailView):
+    model = Lecture
+    template_name = 'courseapp/lecture_details.html'
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': self.object.title})
         return cxt
