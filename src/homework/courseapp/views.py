@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.timezone import now
 from django.views import generic
+
 from userapp.models import Student, Teacher, User
 from userapp.utils import StudentOnlyViewMixin, TeacherOnlyViewMixin
 
@@ -12,8 +13,6 @@ from .forms import (AnswerSubmitionForm, CourseInfoForm, GradeUpdateForm,
                     PresentationCreationForm)
 from .models import (Course, Homework, HomeworkStudentRel, Lecture,
                      Presentation, PresentationStudentRel)
-
-# Create your views here.
 
 
 class TeacherCoursesView(TeacherOnlyViewMixin, generic.ListView):

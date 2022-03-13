@@ -18,7 +18,7 @@ class UserAdminRep(admin.ModelAdmin):
         (None, {
             'fields': ('username', 'email', 'first_name', 'last_name',
                        'date_joined', 'last_login', 'user_type'),
-            }),
+        }),
     )
 
     def get_form(self, request, obj=None, change=None, **kwargs):

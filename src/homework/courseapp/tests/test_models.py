@@ -18,22 +18,22 @@ class TestCourseModel(TestCase):
                                           'written.',
                               teacher=Teacher.objects.get(
                                   username='dummyteacher'
-                                  ))
+                              ))
         Presentation.objects.create(
             start_date=now().date() + timedelta(days=1),
             end_date=now().date() + timedelta(days=10),
             course=Course.objects.get(name='Dummy course')
-            )
+        )
         Presentation.objects.create(
             start_date=now().date() - timedelta(days=1),
             end_date=now().date() + timedelta(days=10),
             course=Course.objects.get(name='Dummy course')
-            )
+        )
         Presentation.objects.create(
             start_date=now().date() - timedelta(days=20),
             end_date=now().date() - timedelta(days=5),
             course=Course.objects.get(name='Dummy course')
-            )
+        )
 
     def test_get_active_presentations(self):
         course = Course.objects.get(name='Dummy course')
@@ -67,17 +67,17 @@ class TestPresentationModel(TestCase):
                                           'written.',
                               teacher=Teacher.objects.get(
                                   username='dummyteacher'
-                                  ))
+                              ))
         Presentation.objects.create(
             start_date=now().date() + timedelta(days=1),
             end_date=now().date() + timedelta(days=10),
             course=Course.objects.get(name='Dummy course')
-            )
+        )
         Presentation.objects.create(
             start_date=now().date() - timedelta(days=1),
             end_date=now().date() + timedelta(days=10),
             course=Course.objects.get(name='Dummy course')
-            )
+        )
 
     def test_is_active(self):
         active_presentation = Presentation.objects.get(id=2)
