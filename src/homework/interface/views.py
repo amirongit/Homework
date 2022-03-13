@@ -1,6 +1,5 @@
-from django.views import generic
-
 from courseapp.models import Course
+from django.views import generic
 
 # Create your views here.
 

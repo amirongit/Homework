@@ -44,6 +44,6 @@ class TeacherProfileView(generic.DetailView):
         cxt.update(
             {
                 'title': f'{self.object.first_name} {self.object.last_name}'
-                }
-            )
+            }
+        )
         return cxt

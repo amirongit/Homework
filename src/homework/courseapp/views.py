@@ -53,10 +53,10 @@ class CourseDetailsView(generic.DetailView):
         cxt = super().get_context_data(*args, **kwargs)
         if (not self.request.user.is_anonymous) and (
                 self.request.user.user_type == User.Types.STUDENT
-                ):
+        ):
             taken = Student.objects.get(id=self.request.user.id).has_taken(
                 Course.objects.get(id=self.object.id)
-                )
+            )
             cxt.update({'taken': taken})
         cxt.update({'title': self.object.name})
         return cxt
@@ -86,7 +86,7 @@ class NewPresentationView(TeacherOnlyViewMixin, generic.CreateView):
         if super().test_func(*args, **kwargs):
             return Course.objects.get(id=self.kwargs[
                 'course_id'
-                ]).teacher == self.request.user
+            ]).teacher == self.request.user
         return False
 
     def form_valid(self, form):
@@ -96,16 +96,16 @@ class NewPresentationView(TeacherOnlyViewMixin, generic.CreateView):
         return redirect(
             reverse('courseapp:course_presentations', kwargs=(
                 {'pk': self.kwargs['course_id']}
-                ))
-                )
+            ))
+        )
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update(
             {'title': 'New presentation', 'course_name': Course.objects.get(
                 id=self.kwargs['course_id']
-                ).name}
-                    )
+            ).name}
+        )
         return cxt
 
 
@@ -120,7 +120,7 @@ class CoursePresentationsView(TeacherOnlyViewMixin, generic.ListView):
         if super().test_func(*args, **kwargs):
             return Course.objects.get(id=self.kwargs[
                 'pk'
-                ]).teacher.id == self.request.user.id
+            ]).teacher.id == self.request.user.id
         return False
 
     def get_context_data(self, *args, **kwargs):
@@ -137,7 +137,7 @@ class JoinPresentationView(StudentOnlyViewMixin, generic.View):
             presentation = Presentation.objects.get(id=self.kwargs['pk'])
             return (not student.has_attended(presentation)) and (
                 not student.has_taken(presentation.course)
-                )
+            )
         return False
 
     def get(self, request, pk):
@@ -145,15 +145,15 @@ class JoinPresentationView(StudentOnlyViewMixin, generic.View):
         student = Student.objects.get(id=request.user.id)
         rel_obj = PresentationStudentRel(
             student=student, presentation=presentation
-            )
+        )
         try:
             rel_obj.save()
             return redirect(reverse('courseapp:student_courses'))
         except IntegrityError:
             return redirect(reverse('courseapp:course_details', kwargs={
-                                        'pk': presentation.course.id
-                                            })
-                            )
+                'pk': presentation.course.id
+            })
+            )
 
 
 class ManagePresentationView(TeacherOnlyViewMixin, generic.DetailView):
@@ -180,7 +180,7 @@ class NewHomeworkView(TeacherOnlyViewMixin, generic.CreateView):
         if super().test_func(*args, **kwargs):
             return Presentation.objects.get(id=self.kwargs[
                 'presentation_id'
-                ]).course.teacher.id == self.request.user.id
+            ]).course.teacher.id == self.request.user.id
         return False
 
     def get_context_data(self, *args, **kwargs):
@@ -192,11 +192,11 @@ class NewHomeworkView(TeacherOnlyViewMixin, generic.CreateView):
         homework = form.save(commit=False)
         homework.presentation = Presentation.objects.get(id=self.kwargs[
             'presentation_id'
-            ])
+        ])
         homework.save()
         return redirect(reverse('courseapp:manage_presentation', kwargs={
             'pk': self.kwargs['presentation_id']
-            }))
+        }))
 
 
 class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
@@ -211,8 +211,8 @@ class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
             return (student.has_attended(homework.presentation)) and (
                 not HomeworkStudentRel.objects.filter(
                     homework=homework
-                    ).filter(student=student).exists()
-                )
+                ).filter(student=student).exists()
+            )
         return False
 
     def form_valid(self, form):
@@ -226,7 +226,7 @@ class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({
             'title': f'{Homework.objects.get(id=self.kwargs["homework_id"])}'
-            })
+        })
         return cxt
 
 
@@ -270,11 +270,11 @@ class AttendancyDetailsView(TeacherOnlyViewMixin, generic.DetailView):
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({
-                    'title': f'{self.get_object().student}',
-                    'homework_set': HomeworkStudentRel.objects.filter(
-                        homework__presentation=self.get_object().presentation
-                        ).filter(student=self.get_object().student)
-                })
+            'title': f'{self.get_object().student}',
+            'homework_set': HomeworkStudentRel.objects.filter(
+                homework__presentation=self.get_object().presentation
+            ).filter(student=self.get_object().student)
+        })
         return cxt
 
 
@@ -287,7 +287,7 @@ class StudentCoursesView(StudentOnlyViewMixin, generic.ListView):
             presentationstudentrel__student=Student.objects.get(
                 id=self.request.user.id
             )
-            )
+        )
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -314,18 +314,18 @@ class NewLectureView(TeacherOnlyViewMixin, generic.CreateView):
         if super().test_func(*args, **kwargs):
             return Presentation.objects.get(id=self.kwargs[
                 'presentation_id'
-                ]).course.teacher.id == self.request.user.id
+            ]).course.teacher.id == self.request.user.id
         return False
 
     def form_valid(self, form):
         lecture = form.save(commit=False)
         lecture.presentation = Presentation.objects.get(id=self.kwargs[
             'presentation_id'
-            ])
+        ])
         lecture.save()
         return redirect(reverse('courseapp:manage_presentation', kwargs={
             'pk': self.kwargs['presentation_id']
-            }))
+        }))
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
