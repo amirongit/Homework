@@ -13,13 +13,6 @@ class TestUserModel(TestCase):
                                  last_name='User', email='dummy@email.com',
                                  password='dummypassword')
 
-    def test_custom_attribute(self):
-        self.assertIn('user_type', dir(User))
-
-    def test_string_format(self):
-        user = User.objects.get(username='dummyuser')
-        self.assertEqual(str(user), 'Dummy User')
-
 
 class TestTeacherModel(TestCase):
     def setUp(self):
