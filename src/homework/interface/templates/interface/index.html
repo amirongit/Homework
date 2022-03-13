@@ -1,3 +1,26 @@
 {% extends 'main/base.html' %}
-{% block content %}
-{% endblock content %}
+{% block bodytag %}
+    <h2 class="page-title">Latest courses</h2>
+    <hr>
+    {% if course_set.all %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for course in course_set.all %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">{{ course }}</h5> <span class="text-muted">by <a href="{% url 'userapp:teacher_profile' course.teacher.id %}" style="color: inherit; text-decoration: none;">{{ course.teacher }}</a></span>
+                        <p class="card-text">{{ course.description|truncatechars:256 }}</p>
+                        {% if course.get_attendable_presentations %}
+                            <a href="{% url 'courseapp:course_details' course.id %}" class="btn btn-sm btn-dark" role="button">Details</a>
+                        {% else %}
+                            <a href="{% url 'courseapp:course_details' course.id %}" class="btn btn-sm btn-light" role="button">Details</a>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h4>No available courses found</h4>
+    {% endif %}
+{% endblock bodytag %}
