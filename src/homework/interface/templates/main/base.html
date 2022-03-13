@@ -21,7 +21,7 @@
     {% endblock headtag %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top container">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'interface:index' %}">Homework</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,18 +53,10 @@
                             <a class="nav-link" href="{% url 'userapp:sign_out' %}">Sign out</a>
                         </li>
                     {% endif %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">About</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Homework platform</a></li>
-                            <li><a class="dropdown-item" href="#">Source code</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/amirongit/Homework">Source code</a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Teacher / Course" aria-label="Search">
-                    <button class="btn btn-light btn-sm" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
