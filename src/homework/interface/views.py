@@ -1,10 +1,18 @@
 from django.views import generic
 
+from courseapp.models import Course
+
 # Create your views here.
 
 
-class Index(generic.TemplateView):
+class Index(generic.ListView):
     template_name = 'interface/index.html'
+    context_object_name = 'course_set'
 
-    def get_context_data(self):
-        return {'title': 'Homepage'}
+    def get_queryset(self):
+        return Course.objects.all()[:6]
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super().get_context_data(*args, **kwargs)
+        cxt.update({'title': 'Homepage'})
+        return cxt
