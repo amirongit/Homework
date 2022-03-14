@@ -136,7 +136,7 @@ class JoinPresentationView(StudentOnlyViewMixin, generic.View):
             presentation = Presentation.objects.get(id=self.kwargs['pk'])
             return (not student.has_attended(presentation)) and (
                 not student.has_taken(presentation.course)
-            )
+            ) and (presentation.is_attendable())
         return False
 
     def get(self, request, pk):
@@ -161,7 +161,10 @@ class ManagePresentationView(TeacherOnlyViewMixin, generic.DetailView):
 
     def test_func(self, *args, **kwargs):
         if super().test_func(*args, **kwargs):
-            return self.get_object().course.teacher.id == self.request.user.id
+            presentation = self.get_object()
+            return (
+                presentation.course.teacher.id == self.request.user.id
+            ) and (presentation.is_active())
         return False
 
     def get_context_data(self, *args, **kwargs):
@@ -177,9 +180,12 @@ class NewHomeworkView(TeacherOnlyViewMixin, generic.CreateView):
 
     def test_func(self, *args, **kwargs):
         if super().test_func(*args, **kwargs):
-            return Presentation.objects.get(id=self.kwargs[
-                'presentation_id'
-            ]).course.teacher.id == self.request.user.id
+            presentation = Presentation.objects.get(
+                id=self.kwargs['presentation_id']
+            )
+            return (
+                presentation.course.teacher.id == self.request.user.id
+            ) and (presentation.is_active())
         return False
 
     def get_context_data(self, *args, **kwargs):
@@ -208,10 +214,8 @@ class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
             homework = Homework.objects.get(id=self.kwargs['homework_id'])
             student = Student.objects.get(id=self.request.user.id)
             return (student.has_attended(homework.presentation)) and (
-                not HomeworkStudentRel.objects.filter(
-                    homework=homework
-                ).filter(student=student).exists()
-            )
+                not student.has_answered(homework)
+            ) and (homework.presentation.is_active())
         return False
 
     def form_valid(self, form):
@@ -219,7 +223,10 @@ class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
         answer.homework = Homework.objects.get(id=self.kwargs['homework_id'])
         answer.student = Student.objects.get(id=self.request.user.id)
         answer.save()
-        return redirect('/')  # change to the list of homeworks later
+        return redirect(reverse(
+            'courseapp:presentation_dashboard',
+            kwargs={'pk': answer.homework.presentation.id}
+        ))
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
@@ -252,8 +259,10 @@ class UpdateGradeView(TeacherOnlyViewMixin, generic.UpdateView):
 
     def test_func(self, *args, **kwargs):
         if super().test_func(*args, **kwargs):
-            return self.get_object(
-            ).presentation.course.teacher.id == self.request.user.id
+            presentation = self.get_object().presentation
+            return (
+                presentation.course.teacher.id == self.request.user.id
+            ) and (presentation.is_active())
         return False
 
     def get_context_data(self, *args, **kwargs):
@@ -298,6 +307,11 @@ class PresentationDashboardView(StudentOnlyViewMixin, generic.DetailView):
     model = Presentation
     template_name = 'courseapp/presentation_dashboard.html'
 
+    def test_func(self, *args, **kwargs):
+        if super().test_func(*args, **kwargs):
+            return self.get_object().is_active()
+        return False
+
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
         cxt.update({'title': self.get_object().course.name,
@@ -311,9 +325,12 @@ class NewLectureView(TeacherOnlyViewMixin, generic.CreateView):
 
     def test_func(self, *args, **kwargs):
         if super().test_func(*args, **kwargs):
-            return Presentation.objects.get(id=self.kwargs[
-                'presentation_id'
-            ]).course.teacher.id == self.request.user.id
+            presentation = Presentation.objects.get(
+                id=self.kwargs['presentation_id']
+            )
+            return (
+                presentation.course.teacher.id == self.request.user.id
+            ) and (presentation.is_active())
         return False
 
     def form_valid(self, form):
@@ -345,6 +362,15 @@ class LectureDetailsView(generic.DetailView):
 class CertificateDetailsView(generic.DetailView):
     model = PresentationStudentRel
     template_name = 'courseapp/certificate_details.html'
+
+    def get_object(self):
+        student = Student.objects.get(id=self.kwargs['student_id'])
+        presentation = Presentation.objects.get(
+            id=self.kwargs['presentation_id']
+        )
+        return PresentationStudentRel.objects.filter(
+            presentation=presentation
+        ).filter(student=student).first()
 
     def get(self, *args, **kwargs):
         if self.get_object().presentation.end_date > now().date():
