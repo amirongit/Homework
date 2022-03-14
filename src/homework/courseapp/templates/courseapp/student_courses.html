@@ -12,9 +12,11 @@
                             <br>
                             <p class="card-text">{{ course.course.description|truncatechars:256 }}</p>
                             {% if course|presentation_has_ended %}
-                                <a href="{% url 'courseapp:certificate_details' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Certificate</a>
-                            {% else %}
+                                <a href="{% url 'courseapp:certificate_details' course.id request.user.id %}" class="card-link btn btn-sm btn-dark" role="btn">Certificate</a>
+                            {% elif course.is_active %}
                                 <a href="{% url 'courseapp:course_dashboard' course.id %}" class="card-link btn btn-sm btn-dark" role="btn">Dashboard</a>
+                            {% else %}
+                                <a href="{% url 'courseapp:course_dashboard' course.id %}" class="card-link btn btn-sm btn-dark disabled" role="btn" aria-disabled="true">Dashboard</a>
                             {% endif %}
                         </div>
                     </div>
