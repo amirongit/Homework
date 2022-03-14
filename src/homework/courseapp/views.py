@@ -223,7 +223,7 @@ class SubmitAnswerView(StudentOnlyViewMixin, generic.CreateView):
         answer.student = Student.objects.get(id=self.request.user.id)
         answer.save()
         return redirect(reverse(
-            'courseapp:presentation_dashboard',
+            'courseapp:course_dashboard',
             kwargs={'pk': answer.homework.presentation.id}
         ))
 
