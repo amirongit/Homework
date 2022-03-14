@@ -57,7 +57,7 @@ urlpatterns = [
          name='course_details'),
     path('lecture_details/<int:pk>/', views.LectureDetailsView.as_view(),
          name='lecture_details'),
-    path('certificate_details/<int:pk>',
+    path('certificate_details/<int:presentation_id>/<int:student_id>/',
          views.CertificateDetailsView.as_view(),
          name='certificate_details')
 ]
