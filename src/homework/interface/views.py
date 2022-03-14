@@ -9,7 +9,7 @@ class Index(generic.ListView):
     context_object_name = 'course_set'
 
     def get_queryset(self):
-        return Course.objects.all()[:6]
+        return Course.objects.all().order_by('-id')[:6]
 
     def get_context_data(self, *args, **kwargs):
         cxt = super().get_context_data(*args, **kwargs)
