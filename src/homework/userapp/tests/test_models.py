@@ -1,9 +1,9 @@
 from datetime import timedelta
 
+from courseapp.models import Course, Homework, Presentation
 from django.test import TestCase
 from django.utils.timezone import now
 
-from courseapp.models import Course, Homework, Presentation
 from ..models import Student, Teacher, User
 
 
