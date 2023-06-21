@@ -1,13 +1,11 @@
-from django.contrib.auth.mixins import (AccessMixin, LoginRequiredMixin,
-                                        UserPassesTestMixin)
+from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 
 from .models import User
 
 
-class TeacherOnlyViewMixin(LoginRequiredMixin, UserPassesTestMixin,
-                           AccessMixin):
+class TeacherOnlyViewMixin(LoginRequiredMixin, UserPassesTestMixin, AccessMixin):
     def test_func(self):
         return self.request.user.user_type == User.Types.TEACHER
 

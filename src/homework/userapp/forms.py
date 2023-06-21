@@ -6,8 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 class UserInfoForm(UserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = ('username', 'password1', 'password2', 'first_name',
-                  'last_name', 'email', 'user_type')
+        fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'user_type')
 
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)

@@ -9,17 +9,24 @@ from ..models import Student, Teacher, User
 
 class TestUserModel(TestCase):
     def setUp(self):
-        User.objects.create_user(username='dummyuser', first_name='Dummy',
-                                 last_name='User', email='dummy@email.com',
-                                 password='dummypassword')
+        User.objects.create_user(
+            username='dummyuser',
+            first_name='Dummy',
+            last_name='User',
+            email='dummy@email.com',
+            password='dummypassword'
+        )
 
 
 class TestTeacherModel(TestCase):
     def setUp(self):
-        Teacher.objects.create_user(username='dummyteacher',
-                                    first_name='Dummy', last_name='Teacher',
-                                    email='dummyt@email.com',
-                                    password='dummypassword')
+        Teacher.objects.create_user(
+            username='dummyteacher',
+            first_name='Dummy',
+            last_name='Teacher',
+            email='dummyt@email.com',
+            password='dummypassword'
+        )
 
     def test_user_type_attribute(self):
         teacher = Teacher.objects.get(username='dummyteacher')
@@ -28,46 +35,50 @@ class TestTeacherModel(TestCase):
 
 class TestStudentModel(TestCase):
     def setUp(self):
-        Student.objects.create_user(username='dummystudent',
-                                    first_name='Dummy', last_name='Student',
-                                    email='dummys@email.com',
-                                    password='dummypassword')
-        Teacher.objects.create_user(username='dummyteacher',
-                                    first_name='Dummy', last_name='Teacher',
-                                    email='dummyt@email.com',
-                                    password='dummypassword')
-        Course.objects.create(name='Dummy course',
-                              description='Dummy description, '
-                                          'just to be written.',
-                              teacher=Teacher.objects.get(
-                                  username='dummyteacher'
-                              ))
+        Student.objects.create_user(
+            username='dummystudent',
+            first_name='Dummy',
+            last_name='Student',
+            email='dummys@email.com',
+            password='dummypassword'
+        )
+        Teacher.objects.create_user(
+            username='dummyteacher',
+            first_name='Dummy',
+            last_name='Teacher',
+            email='dummyt@email.com',
+            password='dummypassword'
+        )
+        Course.objects.create(
+            name='Dummy course',
+            description='Dummy description, just to be written.',
+            teacher=Teacher.objects.get(username='dummyteacher')
+        )
         Presentation.objects.create(
             start_date=now().date() - timedelta(days=-1),
             end_date=now().date() + timedelta(days=1),
             course=Course.objects.get(name='Dummy course')
         )
-        Presentation.objects.get(id=1).students.add(
-            Student.objects.get(username='dummystudent')
+        Presentation.objects.get(id=1).students.add(Student.objects.get(username='dummystudent'))
+        Homework.objects.create(
+            title='Dummy homework',
+            description='Dummy description, just to be written.',
+            presentation=Presentation.objects.get(id=1)
         )
-        Homework.objects.create(title='Dummy homework',
-                                description='Dummy description, '
-                                            'just to be written.',
-                                presentation=Presentation.objects.get(id=1))
         Homework.objects.get(title='Dummy homework').answers.add(
             Student.objects.get(username='dummystudent'),
             through_defaults={'answer': 'Dummy answer, just to be written.'}
         )
-        Homework.objects.create(title='Another dummy homework',
-                                description='Dummy description, '
-                                            'just to be written.',
-                                presentation=Presentation.objects.get(id=1))
-        Course.objects.create(name='Another dummy course',
-                              description='Dummy description, '
-                                          'just to be written.',
-                              teacher=Teacher.objects.get(
-                                  username='dummyteacher'
-                              ))
+        Homework.objects.create(
+            title='Another dummy homework',
+            description='Dummy description, just to be written.',
+            presentation=Presentation.objects.get(id=1)
+        )
+        Course.objects.create(
+            name='Another dummy course',
+            description='Dummy description, just to be written.',
+            teacher=Teacher.objects.get(username='dummyteacher')
+        )
         Presentation.objects.create(
             start_date=now().date() - timedelta(days=-1),
             end_date=now().date() + timedelta(days=1),

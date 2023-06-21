@@ -4,6 +4,4 @@ from . import views
 
 app_name = 'interface'
 
-urlpatterns = [
-    path('', views.Index.as_view(), name='index')
-]
+urlpatterns = [path('', views.Index.as_view(), name='index')]

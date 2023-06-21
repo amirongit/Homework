@@ -1,7 +1,6 @@
 from django import forms
 
-from .models import (Course, Homework, HomeworkStudentRel, Lecture,
-                     Presentation, PresentationStudentRel)
+from .models import Course, Homework, HomeworkStudentRel, Lecture, Presentation, PresentationStudentRel
 
 
 class CourseInfoForm(forms.ModelForm):
@@ -12,9 +11,7 @@ class CourseInfoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['description'].widget.attrs.update(
-            {'class': 'form-control'}
-        )
+        self.fields['description'].widget.attrs.update({'class': 'form-control'})
 
 
 class LectureInforForm(forms.ModelForm):
@@ -33,16 +30,8 @@ class PresentationCreationForm(forms.ModelForm):
         model = Presentation
         exclude = ['students', 'course']
 
-    start_date = forms.DateField(
-        widget=forms.SelectDateWidget(
-            attrs={'class': 'form-select'}
-        )
-    )
-    end_date = forms.DateField(
-        widget=forms.SelectDateWidget(
-            attrs={'class': 'form-select'}
-        )
-    )
+    start_date = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-select'}))
+    end_date = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-select'}))
 
 
 class HomeworkCreationForm(forms.ModelForm):
@@ -53,9 +42,7 @@ class HomeworkCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
-        self.fields['description'].widget.attrs.update(
-            {'class': 'form-control'}
-        )
+        self.fields['description'].widget.attrs.update({'class': 'form-control'})
 
 
 class AnswerSubmitionForm(forms.ModelForm):
@@ -65,9 +52,7 @@ class AnswerSubmitionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['answer'].widget.attrs.update(
-            {'class': 'form-control'}
-        )
+        self.fields['answer'].widget.attrs.update({'class': 'form-control'})
 
 
 class GradeUpdateForm(forms.ModelForm):

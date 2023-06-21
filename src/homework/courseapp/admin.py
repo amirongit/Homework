@@ -1,19 +1,14 @@
 from django.contrib import admin
 
-from .models import (Course, Homework, HomeworkStudentRel, Lecture,
-                     Presentation, PresentationStudentRel)
+from .models import Course, Homework, HomeworkStudentRel, Lecture, Presentation, PresentationStudentRel
 
 
 @admin.register(Course)
 class CourseAdminRep(admin.ModelAdmin):
     list_display = ('name', 'teacher')
-    search_fields = ('name', )
+    search_fields = ('name',)
     readonly_fields = ('name', 'teacher', 'description')
-    fieldsets = (
-        (None, {
-            'fields': readonly_fields
-        }),
-    )
+    fieldsets = ((None, {'fields': readonly_fields}),)
 
     def has_add_permission(self, _):
         return False
@@ -27,9 +22,9 @@ class StudentItemInline(admin.TabularInline):
 @admin.register(Presentation)
 class PresentationAdminRep(admin.ModelAdmin):
     list_display = ('course', 'start_date', 'end_date')
-    search_fields = ('course__name', )
+    search_fields = ('course__name',)
     readonly_fields = ('course', 'start_date', 'end_date')
-    inlines = (StudentItemInline, )
+    inlines = (StudentItemInline,)
 
     def has_add_permission(self, _):
         return False
@@ -45,7 +40,7 @@ class HomeworkAdminRep(admin.ModelAdmin):
     list_display = ('title', 'presentation')
     search_fields = ('title', 'presentation__course__name')
     readonly_fields = ('presentation', 'title', 'description')
-    inlines = (AnswerItemInline, )
+    inlines = (AnswerItemInline,)
 
     def has_add_permission(self, _):
         return False

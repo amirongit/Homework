@@ -15,10 +15,10 @@ class UserAdminRep(admin.ModelAdmin):
     search_fields = ('username', 'first_name', 'last_name')
     readonly_fields = ('date_joined', 'last_login')
     fieldsets = (
-        (None, {
-            'fields': ('username', 'email', 'first_name', 'last_name',
-                       'date_joined', 'last_login', 'user_type'),
-        }),
+        (
+            None,
+            {'fields': ('username', 'email', 'first_name', 'last_name', 'date_joined', 'last_login', 'user_type')}
+        ),
     )
 
     def get_form(self, request, obj=None, change=None, **kwargs):

@@ -9,16 +9,18 @@ from ..models import Course, Presentation
 
 class TestCourseModel(TestCase):
     def setUp(self):
-        Teacher.objects.create_user(username='dummyteacher',
-                                    first_name='Dummy', last_name='Teacher',
-                                    email='dummyt@email.com',
-                                    password='dummypassword')
-        Course.objects.create(name='Dummy course',
-                              description='Dummy description just to be '
-                                          'written.',
-                              teacher=Teacher.objects.get(
-                                  username='dummyteacher'
-                              ))
+        Teacher.objects.create_user(
+            username='dummyteacher',
+            first_name='Dummy',
+            last_name='Teacher',
+            email='dummyt@email.com',
+            password='dummypassword'
+        )
+        Course.objects.create(
+            name='Dummy course',
+            description='Dummy description just to be written.',
+            teacher=Teacher.objects.get(username='dummyteacher')
+        )
         Presentation.objects.create(
             start_date=now().date() + timedelta(days=1),
             end_date=now().date() + timedelta(days=10),
@@ -58,16 +60,18 @@ class TestCourseModel(TestCase):
 
 class TestPresentationModel(TestCase):
     def setUp(self):
-        Teacher.objects.create_user(username='dummyteacher',
-                                    first_name='Dummy', last_name='Teacher',
-                                    email='dummyt@email.com',
-                                    password='dummypassword')
-        Course.objects.create(name='Dummy course',
-                              description='Dummy description just to be '
-                                          'written.',
-                              teacher=Teacher.objects.get(
-                                  username='dummyteacher'
-                              ))
+        Teacher.objects.create_user(
+            username='dummyteacher',
+            first_name='Dummy',
+            last_name='Teacher',
+            email='dummyt@email.com',
+            password='dummypassword'
+        )
+        Course.objects.create(
+            name='Dummy course',
+            description='Dummy description just to be written.',
+            teacher=Teacher.objects.get(username='dummyteacher')
+        )
         Presentation.objects.create(
             start_date=now().date() + timedelta(days=1),
             end_date=now().date() + timedelta(days=10),
